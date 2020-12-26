@@ -1,7 +1,7 @@
 #include "bgui.h"
 #include "Callbacks.h"
 static int gtk_initialized = 0;
-
+int initMenuBar(BGui * parent, GtkWidget * parentGrid, int col, int row);
 BGui::BGui(Application * parent)
 {
  /*if (!gtk_initialized)
@@ -31,16 +31,8 @@ int BGui::setup()
     winGrid = gtk_grid_new(); gtk_container_add(GTK_CONTAINER(window),winGrid);
     
     //MENU (http://zetcode.com/gui/gtk2/menusandtoolbars/):
-    GtkWidget * menuBar = gtk_menu_bar_new(); //gtk_widget_show(menuBar);
-    gtk_grid_attach(GTK_GRID(winGrid),menuBar,0,0,1,1);
-    GtkWidget * fileMenu = gtk_menu_new();
-    GtkWidget * fileMi = gtk_menu_item_new_with_label("File");
-    GtkWidget * quitMi = gtk_menu_item_new_with_label("Quit");
-    g_signal_connect(G_OBJECT(quitMi), "activate",
-        G_CALLBACK(on_window_closed), this);
-    gtk_menu_item_set_submenu(GTK_MENU_ITEM(fileMi),fileMenu);
-    gtk_menu_shell_append(GTK_MENU_SHELL(fileMenu),quitMi);
-    gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),fileMi);   
+    initMenuBar(this,winGrid,0,0);
+    
        
     notebook = new TabbedNotebook(this,winGrid,0,1);
     notebook->addTab();
@@ -56,6 +48,7 @@ int BGui::setup()
 
 
 }
+
 
 
 ControlPanel * Tab::controlPanelLookup(int which)
@@ -117,4 +110,42 @@ void BGui::setStatusMsg(std::string m)
 {
  gtk_label_set_text(GTK_LABEL(statusMsg), m.c_str());
  //printf("HERE\n");
+}
+
+
+int initMenuBar(BGui * parent, GtkWidget * parentGrid, int col, int row)
+{
+    GtkWidget * menuBar = gtk_menu_bar_new(); //gtk_widget_show(menuBar);
+    gtk_grid_attach(GTK_GRID(parentGrid),menuBar,col,row,1,1);
+    
+    GtkWidget * fileMenu = gtk_menu_new();
+    GtkWidget * fileMi = gtk_menu_item_new_with_label("File");
+    GtkWidget * newMi = gtk_menu_item_new_with_label("New");
+    GtkWidget * openMi = gtk_menu_item_new_with_label("Open");
+    GtkWidget * saveMi = gtk_menu_item_new_with_label("Save");
+    GtkWidget * quitMi = gtk_menu_item_new_with_label("Quit");
+    g_signal_connect(G_OBJECT(quitMi), "activate",
+        G_CALLBACK(BGui::on_window_closed), parent);
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(fileMi),fileMenu);
+    gtk_menu_shell_append(GTK_MENU_SHELL(fileMenu),newMi);
+    gtk_menu_shell_append(GTK_MENU_SHELL(fileMenu),openMi);
+    gtk_menu_shell_append(GTK_MENU_SHELL(fileMenu),saveMi);
+    gtk_menu_shell_append(GTK_MENU_SHELL(fileMenu),quitMi);
+    gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),fileMi);   
+    
+    GtkWidget * editMenu = gtk_menu_new(); 
+    GtkWidget * editMi = gtk_menu_item_new_with_label("Edit");
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(editMi),editMenu);
+    
+    /*GtkWidget * newMi = gtk_menu_item_new_with_label("New");
+    GtkWidget * openMi = gtk_menu_item_new_with_label("Open");
+    GtkWidget * saveMi = gtk_menu_item_new_with_label("Save");
+    GtkWidget * quitMi = gtk_menu_item_new_with_label("Quit");
+    g_signal_connect(G_OBJECT(quitMi), "activate",
+        G_CALLBACK(BGui::on_window_closed), parent);
+    gtk_menu_shell_append(GTK_MENU_SHELL(fileMenu),newMi);
+    gtk_menu_shell_append(GTK_MENU_SHELL(fileMenu),openMi);
+    gtk_menu_shell_append(GTK_MENU_SHELL(fileMenu),saveMi);
+    gtk_menu_shell_append(GTK_MENU_SHELL(fileMenu),quitMi);*/
+    gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),editMi);   
 }

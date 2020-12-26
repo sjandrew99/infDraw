@@ -24,7 +24,7 @@ class Tab
   int set_image(cv::Mat * image);
   TabbedNotebook * parent;
   ImageManager * imgMgr;
-  Artist * artist;
+  //Artist * artist;
 };
 
 class BGui;

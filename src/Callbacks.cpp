@@ -25,10 +25,8 @@ void Callbacks::imageMotionFunc(GtkWidget * w, GdkEventButton * e, gpointer data
 
 void Callbacks::imageClickFunc(GtkWidget * w, GdkEventButton * e, gpointer data)
 {
- //fprintf(stderr,"CLICKED: %lf %lf\n", e->x, e->y);
  Tab * tab = (Tab *)data;
  Application * app = tab->parent->parent->parent;
- //fprintf(stderr,"APP = %p\n",app);
  app->gui.clickedPoints.push_back({(int)e->x, (int)e->y});
 }
 
@@ -67,8 +65,3 @@ void Callbacks::key_event(GtkWidget * w, GdkEventKey * e, gpointer data)
  //return FALSE;
 }
 
-/*void Callbacks::toggle_playback(GtkWidget * widget, gpointer data)
-{
- VideoManager * vidMgr = (VideoManager *)data;
- vidMgr->togglePlayback();
-}*/
