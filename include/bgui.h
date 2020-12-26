@@ -8,11 +8,7 @@
 #include "imageViewPort.h"
 #include "imageManager.h"
 #include "tabbedNotebook.h"
-struct cv_point_t
-{
- float x; float y;
-};
-
+#include "common.h"
 
 class Application;
 class BGui
@@ -22,7 +18,7 @@ class BGui
   BGui(Application * parent);
   ~BGui();
   int setup();
-  int set_image(int imageNumber, cv::Mat * image);
+  int set_image(cv::Mat * image);
   
   static 
   void on_window_closed(GtkWidget * window, gpointer data);
@@ -31,7 +27,7 @@ class BGui
   {
    return closed;
   }
-  std::vector <cv_point_t> clickedPoints;
+  std::vector <d_point_t> clickedPoints;
   GtkWidget *  addControl(int whichPanel, int type, std::string label, int row, int column);
   int addChild(GtkWidget * w, std::string s) {children.push_back(w); childIds.push_back(s); return 0;}
   GtkWidget * getChildById(std::string s);

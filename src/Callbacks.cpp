@@ -6,19 +6,24 @@ void Callbacks::imageMotionFunc(GtkWidget * w, GdkEventButton * e, gpointer data
  Tab * tab = (Tab *)data;
  Application * pgui = tab->parent->parent->parent;
  //pgui->scratchFrame = pgui->vidMgr.frame;
- if (pgui->appState == APPSTATE_DRAW_RECTANGLE && pgui->gui.clickedPoints.size() == 1)
+ //TODO - add something for APPSTATE_DEFAULT here
+ if (pgui->appState == APPSTATE_DEFAULT)
+ {
+  //TODO - check for intersections
+ }
+ else if (pgui->appState == APPSTATE_DRAW_RECTANGLE && pgui->gui.clickedPoints.size() == 1)
  {
   //draw a rectangle between the first point and the current point
   tab->imgMgr->scratchFrame.copyTo(tab->imgMgr->frame);
   Artist::drawRectangle(tab->imgMgr->frame,pgui->gui.clickedPoints[0].x,pgui->gui.clickedPoints[0].y,e->x,e->y);
-  pgui->gui.set_image(0,&(tab->imgMgr->frame));
+  pgui->gui.set_image(&(tab->imgMgr->frame));
  }
  else if (pgui->appState == APPSTATE_DRAW_LINE && pgui->gui.clickedPoints.size() == 1)
  {
   //fprintf(stderr,"IMAGEMOTION\n");
   tab->imgMgr->scratchFrame.copyTo(tab->imgMgr->frame); // copy the scratchFrame to frame
   Artist::drawLine(tab->imgMgr->frame,pgui->gui.clickedPoints[0].x,pgui->gui.clickedPoints[0].y,e->x,e->y);
-  pgui->gui.set_image(0,&(tab->imgMgr->frame)); // should only do this call when we're running line selector in a worker thread
+  pgui->gui.set_image(&(tab->imgMgr->frame)); // should only do this call when we're running line selector in a worker thread
  } 
 }
 

@@ -28,7 +28,7 @@ class Application
  gint worker_thread_id;
 
  int appState;
-
+ void toDefaultState();
 
  
 };

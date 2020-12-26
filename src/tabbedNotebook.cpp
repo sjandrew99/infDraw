@@ -73,12 +73,19 @@ int Tab::addDrawable(int which)
   case DRAWABLE_RECTANGLE:
   {
    DRectangle * rect = new DRectangle();
-   GtkWidget * w = gtk_label_new("stuff"); gtk_widget_show(w);
+   char label[128]; sprintf(label,"Rectangle%d",drawables.size());
+   GtkWidget * w = gtk_label_new(label); gtk_widget_show(w);
    gtk_list_box_insert(GTK_LIST_BOX(objectList),w,-1);
+   drawables.push_back((Drawable *)rect);
    break; 
   }
   case DRAWABLE_LINE:
   {
+   DLine * line = new DLine();
+   char label[128]; sprintf(label,"Line%d",drawables.size());
+   GtkWidget * w = gtk_label_new(label); gtk_widget_show(w);
+   gtk_list_box_insert(GTK_LIST_BOX(objectList),w,-1);
+   drawables.push_back((Drawable *)line);
    break;
   }
  }

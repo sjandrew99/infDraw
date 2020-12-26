@@ -32,7 +32,6 @@ int BGui::setup()
     
     //MENU (http://zetcode.com/gui/gtk2/menusandtoolbars/):
     initMenuBar(this,winGrid,0,0);
-    
        
     notebook = new TabbedNotebook(this,winGrid,0,1);
     notebook->addTab();
@@ -42,14 +41,9 @@ int BGui::setup()
     gtk_grid_attach(GTK_GRID(winGrid),statusMsg,0,2,1,1);
     closed = 0;
 
-
     gtk_widget_show_all(window);
     return 0;
-
-
 }
-
-
 
 ControlPanel * Tab::controlPanelLookup(int which)
 {
@@ -67,15 +61,9 @@ ControlPanel * Tab::controlPanelLookup(int which)
 
 
 
-int BGui::set_image(int a, cv::Mat * image)
+int BGui::set_image(cv::Mat * image)
 {
- 
- //fprintf(stderr,"HERE IN SET IMAGE - %d x %d\n",image->rows,image->cols);
  notebook->getActiveTab()->set_image(image);
- //gtk_widget_set_size_request(imageViewPorts[imageNumber]->drawing_area,image->co
- //imageViewPorts[imageNumber]->image = image;
- 
- //gtk_widget_queue_draw(window);
  return 0;
 }
 

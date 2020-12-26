@@ -8,26 +8,21 @@ void rectangleDrawThread(Application * app)
  Tab * tab = app->gui.notebook->getActiveTab();
  if (app->gui.clickedPoints.size() == 1 && !drew)
  {
-   //cv::circle(tab->imgMgr->frame,cv::Point(app->gui.clickedPoints[0].x,app->gui.clickedPoints[0].y),
-   //           1,cv::Scalar(0,0,0),-1);
    Artist::drawPoint(tab->imgMgr->frame,app->gui.clickedPoints[0].x,app->gui.clickedPoints[0].y);
    tab->imgMgr->frame.copyTo(tab->imgMgr->scratchFrame);  //scratchFrame now contains the original frame, plus a dot at the clickedPoint
    drew = 1;
-   app->gui.set_image(0,&(tab->imgMgr->frame));
+   app->gui.set_image(&(tab->imgMgr->frame));
  } 
- 
  if (app->gui.clickedPoints.size() == 2)
  {
   //save the rectangle to frame:
+  //tab->addRectangle(app->gui.clickedPoints[0].x,app->gui.clickedPoints[0].y,app->gui.clickedPoints[1].x,app->gui.clickedPoints[1].y);
   Artist::drawRectangle(tab->imgMgr->frame,app->gui.clickedPoints[0].x,app->gui.clickedPoints[0].y,app->gui.clickedPoints[1].x,app->gui.clickedPoints[1].y);
-  app->gui.clickedPoints.clear();
-  app->appState = APPSTATE_DEFAULT;
-  app->gui.setStatusMsg("SELECT"); 
+  app->toDefaultState();
   tab->addDrawable(DRAWABLE_RECTANGLE);
   drew = 0;
  }
 }
-
 
 void lineDrawThread(Application * app) 
 {
@@ -39,31 +34,26 @@ void lineDrawThread(Application * app)
    Artist::drawPoint(tab->imgMgr->frame,app->gui.clickedPoints[0].x,app->gui.clickedPoints[0].y);
    tab->imgMgr->frame.copyTo(tab->imgMgr->scratchFrame);  //scratchFrame now contains the original frame, plus a dot at the clickedPoint
    drew = 1;
-   app->gui.set_image(0,&(tab->imgMgr->frame)); 
+   app->gui.set_image(&(tab->imgMgr->frame)); 
  }
  if (app->gui.clickedPoints.size() == 2)
  {
   Artist::drawLine(tab->imgMgr->frame,app->gui.clickedPoints[0].x,app->gui.clickedPoints[0].y,app->gui.clickedPoints[1].x,app->gui.clickedPoints[1].y);
-  app->gui.clickedPoints.clear();
-  app->appState = APPSTATE_DEFAULT;
-  app->gui.setStatusMsg("SELECT"); 
-
+  app->toDefaultState();
+  tab->addDrawable(DRAWABLE_LINE);
   drew = 0;
  }
 }
 
-
-
 void drawThread(Application * app)
 {
       Tab * tab = app->gui.notebook->getActiveTab();
-      app->gui.set_image(0,&(tab->imgMgr->frame));
+      app->gui.set_image(&(tab->imgMgr->frame));
 }
 
 //do_draw will be executed in a separate thread whenever we would like to update our animation
 void * Application::do_draw(void * ptr)
 {
-    
     Application * app = (Application *)ptr;
     //app->currently_drawing = 1;
     currently_drawing = 1;
@@ -106,4 +96,10 @@ gboolean Application::worker_thread_func(Application * app)
  return TRUE;
 }
 
+void Application::toDefaultState()
+{
+  gui.clickedPoints.clear();
+  appState = APPSTATE_DEFAULT;
+  gui.setStatusMsg("SELECT"); 
+}
 
