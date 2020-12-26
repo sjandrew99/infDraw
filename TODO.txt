@@ -2,3 +2,7 @@
 - add method for user to add more tabs
 - add method for user to resize canvas
 - add list of "drawables" on right-hand side of tab
+- add menu bar ("File","Edit", etc)
+- get rid of Application class (or merge it with gui)
+- add method to change color, thickness, curvature, etc
+- add 'Drawable' class and descendants
