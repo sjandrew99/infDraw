@@ -7,8 +7,8 @@
 #include "controlPanel.h"
 #include "imageViewPort.h"
 #include "imageManager.h"
-
-
+#include "Drawable.h"
+#include "Artist.h"
 class TabbedNotebook; //forward declare 
 class Tab
 {
@@ -24,6 +24,7 @@ class Tab
   int set_image(cv::Mat * image);
   TabbedNotebook * parent;
   ImageManager * imgMgr;
+  Artist * artist;
 };
 
 class BGui;

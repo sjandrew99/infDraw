@@ -62,10 +62,11 @@ void Callbacks::key_event(GtkWidget * w, GdkEventKey * e, gpointer data)
   b->clickedPoints.clear();
   b->parent->appState = APPSTATE_DRAW_RECTANGLE;
  }
- else if (strcmp(key,"c") == 0) 
+ 
+ /*else if (strcmp(key,"c") == 0) 
  {
   b->notebook->getActiveTab()->imgMgr->clearFrame();
- }
+ }*/
  //return FALSE;
 }
 

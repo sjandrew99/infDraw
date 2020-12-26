@@ -6,3 +6,4 @@
 - get rid of Application class (or merge it with gui)
 - add method to change color, thickness, curvature, etc
 - add 'Drawable' class and descendants
+- add method to delete drawables
