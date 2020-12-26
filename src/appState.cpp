@@ -10,7 +10,7 @@ void rectangleSelector(Application * app) //TODO - rename this function or somet
  if (app->gui.clickedPoints.size() == 1 && !drew)
  {
    cv::circle(tab->imgMgr->frame,cv::Point(app->gui.clickedPoints[0].x,app->gui.clickedPoints[0].y),
-              2,cv::Scalar(0,0,0),-1);
+              1,cv::Scalar(0,0,0),-1);
    tab->imgMgr->frame.copyTo(tab->imgMgr->scratchFrame);  //scratchFrame now contains the original frame, plus a dot at the clickedPoint
    drew = 1;
    app->gui.set_image(0,&(tab->imgMgr->frame));
@@ -40,7 +40,7 @@ void line_selector_thing (Application * app) //TODO - replace blocking while loo
  if (app->gui.clickedPoints.size() == 1 && !drew)
  {
    cv::circle(tab->imgMgr->frame,cv::Point(app->gui.clickedPoints[0].x,app->gui.clickedPoints[0].y),
-              2,cv::Scalar(0,0,0),-1);
+              1,cv::Scalar(0,0,0),-1);
    tab->imgMgr->frame.copyTo(tab->imgMgr->scratchFrame);  //scratchFrame now contains the original frame, plus a dot at the clickedPoint
    drew = 1;
    app->gui.set_image(0,&(tab->imgMgr->frame)); 

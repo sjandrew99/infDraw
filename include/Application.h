@@ -20,7 +20,6 @@ class Application
  Application ();
  
  BGui gui; 
- //ImageManager imgMgr;
  
  int valid;
  int init(char *);
@@ -28,9 +27,7 @@ class Application
  static gboolean worker_thread_func(Application *);
  gint worker_thread_id;
 
- //cv::Mat scratchFrame;
  int appState;
- //int currently_drawing; 
 
 
  

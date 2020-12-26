@@ -1,0 +1,4 @@
+- add snap-connect
+- add method for user to add more tabs
+- add method for user to resize canvas
+- add list of "drawables" on right-hand side of tab
