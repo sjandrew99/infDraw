@@ -45,6 +45,11 @@ GtkWidget * ControlPanel::addControl(int type, std::string label, int row, int c
       gtk_combo_box_text_prepend_text(GTK_COMBO_BOX_TEXT(control),label.c_str());
       gtk_combo_box_set_active(GTK_COMBO_BOX(control),0);
      }
+     else if (type == CONTROL_PANEL_LIST_BOX)
+     {
+      control = gtk_list_box_new();
+      gtk_widget_set_name(control,label.c_str()); 
+     }
      else
      {
       fprintf(stderr,"unknown control type: %d\n", type);

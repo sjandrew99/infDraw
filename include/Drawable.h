@@ -3,6 +3,7 @@
 
 #include <string>
 
+
 class Drawable
 {
  public:
@@ -11,23 +12,39 @@ class Drawable
    
 };
 
-class TextBox : public Drawable
+class DTextBox : public Drawable
 {
  public:
+  DTextBox();
   void draw();
   std::string text; 
 };
 
-class Connector : public Drawable
+
+class DConnector : public Drawable
 {
  public:
-  TextBox label;
+  DTextBox label;
 };
 
-class Shape : public Drawable
+#define DRAWABLE_LINE 1
+class DLine : public DConnector
+{
+
+};
+
+class DShape : public Drawable
 {
  public:
-  TextBox label;
+  DTextBox label;
+};
+
+#define DRAWABLE_RECTANGLE 2
+class DRectangle : public DShape
+{
+ public:
+  DRectangle();
+  void draw();
 };
 
 #endif

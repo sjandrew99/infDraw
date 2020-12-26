@@ -7,3 +7,4 @@
 - add method to change color, thickness, curvature, etc
 - add 'Drawable' class and descendants
 - add method to delete drawables
+- put imageViewPort in a scrollableWindow

@@ -24,7 +24,10 @@ class Tab
   int set_image(cv::Mat * image);
   TabbedNotebook * parent;
   ImageManager * imgMgr;
+  GtkWidget * objectList;
   //Artist * artist;
+  std::vector<Drawable> drawables;
+  int addDrawable(int which);
 };
 
 class BGui;

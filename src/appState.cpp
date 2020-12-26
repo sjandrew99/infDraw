@@ -23,6 +23,7 @@ void rectangleDrawThread(Application * app)
   app->gui.clickedPoints.clear();
   app->appState = APPSTATE_DEFAULT;
   app->gui.setStatusMsg("SELECT"); 
+  tab->addDrawable(DRAWABLE_RECTANGLE);
   drew = 0;
  }
 }
