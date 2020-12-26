@@ -2,9 +2,8 @@
 
 static int currently_drawing = 0;
 
-void rectangleSelector(Application * app) //TODO - rename this function or something, to make it specific to red blobs
+void rectangleDrawThread(Application * app) 
 {
- //fprintf(stderr,"RETANGLE SELECTOR\n");
  static int drew = 0;
  Tab * tab = app->gui.notebook->getActiveTab();
  if (app->gui.clickedPoints.size() == 1 && !drew)
@@ -19,11 +18,7 @@ void rectangleSelector(Application * app) //TODO - rename this function or somet
  if (app->gui.clickedPoints.size() == 2)
  {
   //save the rectangle to frame:
-  cv::line(tab->imgMgr->frame, cv::Point(app->gui.clickedPoints[0].x,app->gui.clickedPoints[0].y), cv::Point(app->gui.clickedPoints[1].x,app->gui.clickedPoints[0].y), cv::Scalar(0,0,0), 2);
-  cv::line(tab->imgMgr->frame, cv::Point(app->gui.clickedPoints[0].x,app->gui.clickedPoints[0].y), cv::Point(app->gui.clickedPoints[0].x,app->gui.clickedPoints[1].y), cv::Scalar(0,0,0), 2);
-  cv::line(tab->imgMgr->frame, cv::Point(app->gui.clickedPoints[1].x,app->gui.clickedPoints[1].y), cv::Point(app->gui.clickedPoints[1].x,app->gui.clickedPoints[0].y), cv::Scalar(0,0,0), 2);
-  cv::line(tab->imgMgr->frame, cv::Point(app->gui.clickedPoints[1].x,app->gui.clickedPoints[1].y), cv::Point(app->gui.clickedPoints[0].x,app->gui.clickedPoints[1].y), cv::Scalar(0,0,0), 2);
-  
+  Artist::drawRectangle(tab->imgMgr->frame,app->gui.clickedPoints[0].x,app->gui.clickedPoints[0].y,app->gui.clickedPoints[1].x,app->gui.clickedPoints[1].y);
   app->gui.clickedPoints.clear();
   app->appState = APPSTATE_DEFAULT;
   app->gui.setStatusMsg("SELECT"); 
@@ -32,7 +27,7 @@ void rectangleSelector(Application * app) //TODO - rename this function or somet
 }
 
 
-void line_selector_thing (Application * app) //TODO - replace blocking while loop with multiple calls to this func, then return FALSE when "done"
+void lineDrawThread(Application * app) 
 {
  //fprintf(stderr,"line selector thread\n");
  static int drew = 0;
@@ -62,7 +57,7 @@ void line_selector_thing (Application * app) //TODO - replace blocking while loo
 
 
 
-void playVid(Application * app)
+void drawThread(Application * app)
 {
       Tab * tab = app->gui.notebook->getActiveTab();
       app->gui.set_image(0,&(tab->imgMgr->frame));
@@ -78,13 +73,13 @@ void * Application::do_draw(void * ptr)
     switch (app->appState)
     {
      case APPSTATE_DEFAULT:
-      playVid(app);
+      drawThread(app);
       break;
      case APPSTATE_DRAW_LINE:
-      line_selector_thing(app);
+      lineDrawThread(app);
       break;
      case APPSTATE_DRAW_RECTANGLE:
-      rectangleSelector(app);
+      rectangleDrawThread(app);
       break;
     }
     currently_drawing = 0;

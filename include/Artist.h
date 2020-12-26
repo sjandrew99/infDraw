@@ -4,7 +4,8 @@
 //handles drawing operations
 class Artist
 {
- int drawRectangle(cv::Mat & frame);
+ public: 
+ static int drawRectangle(cv::Mat & frame,float,float,float,float);
  int drawLine(cv::Mat & frame);
 };
 

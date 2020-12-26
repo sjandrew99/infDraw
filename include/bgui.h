@@ -10,7 +10,7 @@
 #include "tabbedNotebook.h"
 struct cv_point_t
 {
- int x; int y;
+ float x; float y;
 };
 
 
