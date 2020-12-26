@@ -1,8 +1,3 @@
-#BGUI_OBJS := obj/bgui.o obj/controlPanel.o obj/Callbacks.o obj/imageViewPort.o
-#IMPROC_OBJS := obj/Clumper.o obj/cvFuncs.o obj/keypointDetector.o
-#ALL_OBJS := obj/main.o $(BGUI_OBJS) obj/videoManager.o $(IMPROC_OBJS) obj/Application.o obj/Tracker.o obj/CrossingCounter.o obj/Track.o obj/appState.o
-#PDIR := /home/steve/build/pyclustering/ccore/obj/ccore/64-bit/cluster/
-#CLUSTER_OBJ:= $(PDIR)/dbscan.o
 
 srcdir=src
 objdir=obj
@@ -32,29 +27,21 @@ ALL_OBJS := $(patsubst $(srcdir)/%.cpp, $(objdir)/%.o, $(wildcard $(srcdir)/*.cp
 
 
 #targets:
-.PHONY: all clean talk
+.PHONY: all clean
 
-all : talk infDraw
+all : infDraw
 	@echo "make done"
-
-talk :
-	@echo "building..."
 
 infDraw: $(ALL_OBJS)
 	@echo ""
-	@echo "building viewer"
+	@echo "building infDraw"
 	$(CC) $(ALL_OBJS) -o $@ $(LFLAGS) -lgthread-2.0 -lpthread
 
-#obj/Clumper.o : bernoulli/detector/Clumper.cpp
-#	$(CC) $(cflags) -I. -c $< -o $@
 
 $(objdir)/%.o : $(srcdir)/%.cpp
 	$(CC) $(cflags) -c $< -o $@
 
-deps :
-	$(foreach dlib, $(deplibs), cd $(dir $(dlib)) && make) 
-
 clean :
 	@echo "make -f ./makefile clean"
-	rm -f viewer $(ALL_OBJS)
+	rm -f infDraw $(ALL_OBJS)
 	$(foreach dlib, $(deplibs), cd $(dir $(dlib)) && make clean) 
