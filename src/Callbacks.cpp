@@ -17,7 +17,7 @@ void Callbacks::imageMotionFunc(GtkWidget * w, GdkEventButton * e, gpointer data
  {
   //fprintf(stderr,"IMAGEMOTION\n");
   tab->imgMgr->scratchFrame.copyTo(tab->imgMgr->frame); // copy the scratchFrame to frame
-  cv::line(tab->imgMgr->frame, cv::Point(pgui->gui.clickedPoints[0].x,pgui->gui.clickedPoints[0].y), cv::Point(e->x,e->y), cv::Scalar(0,0,0), 2);
+  Artist::drawLine(tab->imgMgr->frame,pgui->gui.clickedPoints[0].x,pgui->gui.clickedPoints[0].y,e->x,e->y);
   pgui->gui.set_image(0,&(tab->imgMgr->frame)); // should only do this call when we're running line selector in a worker thread
  } 
 }

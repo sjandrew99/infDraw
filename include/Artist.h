@@ -5,8 +5,9 @@
 class Artist
 {
  public: 
- static int drawRectangle(cv::Mat & frame,float,float,float,float);
- int drawLine(cv::Mat & frame);
+  static int drawPoint(cv::Mat & frame, float,float);
+  static int drawRectangle(cv::Mat & frame,float,float,float,float);
+  static int drawLine(cv::Mat & frame,float,float,float,float);
 };
 
 #endif

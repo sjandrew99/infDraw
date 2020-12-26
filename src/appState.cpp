@@ -8,8 +8,9 @@ void rectangleDrawThread(Application * app)
  Tab * tab = app->gui.notebook->getActiveTab();
  if (app->gui.clickedPoints.size() == 1 && !drew)
  {
-   cv::circle(tab->imgMgr->frame,cv::Point(app->gui.clickedPoints[0].x,app->gui.clickedPoints[0].y),
-              1,cv::Scalar(0,0,0),-1);
+   //cv::circle(tab->imgMgr->frame,cv::Point(app->gui.clickedPoints[0].x,app->gui.clickedPoints[0].y),
+   //           1,cv::Scalar(0,0,0),-1);
+   Artist::drawPoint(tab->imgMgr->frame,app->gui.clickedPoints[0].x,app->gui.clickedPoints[0].y);
    tab->imgMgr->frame.copyTo(tab->imgMgr->scratchFrame);  //scratchFrame now contains the original frame, plus a dot at the clickedPoint
    drew = 1;
    app->gui.set_image(0,&(tab->imgMgr->frame));
@@ -34,23 +35,18 @@ void lineDrawThread(Application * app)
  Tab * tab = app->gui.notebook->getActiveTab();
  if (app->gui.clickedPoints.size() == 1 && !drew)
  {
-   cv::circle(tab->imgMgr->frame,cv::Point(app->gui.clickedPoints[0].x,app->gui.clickedPoints[0].y),
-              1,cv::Scalar(0,0,0),-1);
+   Artist::drawPoint(tab->imgMgr->frame,app->gui.clickedPoints[0].x,app->gui.clickedPoints[0].y);
    tab->imgMgr->frame.copyTo(tab->imgMgr->scratchFrame);  //scratchFrame now contains the original frame, plus a dot at the clickedPoint
    drew = 1;
    app->gui.set_image(0,&(tab->imgMgr->frame)); 
  }
  if (app->gui.clickedPoints.size() == 2)
  {
-  //fprintf(stderr,"HERE\n");
-  //save the line to frame:
-  cv::line(tab->imgMgr->frame, 
-           cv::Point(app->gui.clickedPoints[0].x,app->gui.clickedPoints[0].y),
-           cv::Point(app->gui.clickedPoints[1].x,app->gui.clickedPoints[1].y), cv::Scalar(0,0,0), 2);
-  
+  Artist::drawLine(tab->imgMgr->frame,app->gui.clickedPoints[0].x,app->gui.clickedPoints[0].y,app->gui.clickedPoints[1].x,app->gui.clickedPoints[1].y);
   app->gui.clickedPoints.clear();
   app->appState = APPSTATE_DEFAULT;
   app->gui.setStatusMsg("SELECT"); 
+
   drew = 0;
  }
 }
