@@ -36,7 +36,7 @@ void Callbacks::imageClickFunc(GtkWidget * w, GdkEventButton * e, gpointer data)
  BGui * gui = tab->parent->parent;
  if (gui->appState==APPSTATE_DEFAULT)
  {
-  int clicked = 1;
+  int clicked = 0;
   for (auto i = tab->drawables.begin(); i != tab->drawables.end(); ++i)
   {
    for (auto j= (*i)->clickablePoints.begin(); j != (*i)->clickablePoints.end(); ++j)
@@ -87,6 +87,10 @@ void Callbacks::key_event(GtkWidget * w, GdkEventKey * e, gpointer data)
   b->setStatusMsg("BOX"); 
   b->clickedPoints.clear();
   b->appState = APPSTATE_DRAW_RECTANGLE;
+ }
+ else if (strcmp(key,"Delete") == 0 && b->appState == APPSTATE_DEFAULT)
+ {
+  b->notebook->getActiveTab()->deleteSelectedDrawables();
  }
 
  

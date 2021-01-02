@@ -103,13 +103,52 @@ int Tab::addLine(float x1,float y1,float x2, float y2)
 
 void Tab::drawAll()
 {
- for (int i=0; i<drawables.size(); i++)
+ /*for (int i=0; i<drawables.size(); i++)
  {
   drawables[i]->draw();
+ }*/
+ for (auto i=drawables.begin(); i!=drawables.end(); i++)
+ {
+  (*i)->draw();
  }
 }
 
 void Tab::clear()
 {
  imgMgr->clearFrame();
+}
+
+bool is_selected(const Drawable * d) { return d->selected;}
+
+void Tab::deleteSelectedDrawables()
+{
+ /*for (int i=0; i < drawables.size(); ++i)
+ {
+  if (drawables[i]->selected)
+  {
+   delete(drawables[i]);
+   removes.push_back(i);
+  }
+ }*/
+ //drawables.remove_if(is_selected);
+ //fprintf(stderr,"HERE\n");
+ auto i = drawables.begin();
+ while(i!= drawables.end())
+ {
+  if ((*i)->selected)
+  {
+   i = drawables.erase(i);
+   //fprintf(stderr,"DELETE\n");
+   //TODO - delete the thing in objectList also, and probably the underlying object
+  }
+  else
+  {
+   ++i;
+  }
+ }
+  
+ /*for (auto i=drawables.begin(); i!=drawables.end(); i++)
+ {
+  
+ }*/
 }

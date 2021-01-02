@@ -42,9 +42,22 @@ DLine::DLine(Tab * parent,std::string id, float x1, float y1, float x2, float y2
  p2 = {x2,y2};
  lineWidth = LINE_WIDTH; //TODO - pass this in
  selected = 0;
+ 
+ 
+ float _x1 = min(x1,x2);
+ float _x2 = max(x1,x2);
+ float _y1 = min(y1,y2);
+ float _y2 = max(y2,y1); 
+ 
  slope = (y2-y1) / (x2-x1); 
  intrcpt = y2 - (slope*x2);
- this->label = new DTextBox(parent, id, min(x1,x2),min(y1,y2));
+ this->label = new DTextBox(parent, id, x1,y1);
+ 
+ //add clickable points:
+ for (float i=_x1; i<_x2; i++)
+ {
+  clickablePoints.push_back({i, slope*i + intrcpt});
+ } 
 }
 
 void DLine::draw() 

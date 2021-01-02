@@ -22,12 +22,15 @@ class Tab
   ControlPanel * controlPanelLeft;
   ControlPanel * controlPanelLookup(int idx);
   ImageViewPort * imageViewPort; 
+  GtkWidget * objectList;
+  
   int set_image(cv::Mat * image);
   TabbedNotebook * parent;
   ImageManager * imgMgr;
-  GtkWidget * objectList;
+  
   //Artist * artist;
-  std::vector<Drawable*> drawables;
+  //std::vector<Drawable*> drawables;
+  std::list<Drawable*> drawables;
   //std::vector<> clickablePoints
   //std::vector<int> drawableTypes; 
   //int addDrawable(int which);
@@ -35,6 +38,7 @@ class Tab
   int addLine(float x1,float y1,float x2, float y2);
   void drawAll();
   void clear();
+  void deleteSelectedDrawables();
 };
 
 class BGui;
