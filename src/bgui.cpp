@@ -2,13 +2,8 @@
 #include "Callbacks.h"
 //static int gtk_initialized = 0;
 int initMenuBar(BGui * parent, GtkWidget * parentGrid, int col, int row);
-BGui::BGui(Application * parent)
+BGui::BGui()
 {
- /*if (!gtk_initialized)
- {
-  gtk_init(0,NULL); gtk_initialized = 1;
- }*/
- this->parent = parent;
  this->window = NULL;
  this->winsize = NULL;
  this->notebook = NULL;
@@ -42,6 +37,8 @@ int BGui::setup()
     closed = 0;
 
     gtk_widget_show_all(window);
+    appState = APPSTATE_DEFAULT;
+
     return 0;
 }
 

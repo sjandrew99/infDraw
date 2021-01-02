@@ -32,6 +32,8 @@ class Tab
   //int addDrawable(int which);
   int addRectangle(float x1,float y1,float x2, float y2);
   int addLine(float x1,float y1,float x2, float y2);
+  void drawAll();
+  void clear();
 };
 
 class BGui;

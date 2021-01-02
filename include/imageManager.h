@@ -13,6 +13,8 @@ public:
  void clearScratchFrame();
  void clearFrame(cv::Mat &);
  void resizeFrame(int,int);
+ void cache(); //copy frame to scratch frame
+ void pop(); //copy scratch frame to frame
  int width;
  int height;
 }; 

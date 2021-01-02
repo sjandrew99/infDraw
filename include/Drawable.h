@@ -26,22 +26,23 @@ class Drawable
 class DTextBox : public Drawable
 {
  public:
-  DTextBox();
+  DTextBox(Tab * parent, std::string text,float,float);
   void draw();
   void select();
   void highlight();
   std::string text; 
+  float x; float y; //top left
 };
 
 
-class DConnector : public Drawable
+/*class DConnector : public Drawable
 {
  public:
   DTextBox label;
-};
+};*/
 
 #define DRAWABLE_LINE 1
-class DLine : public DConnector
+class DLine : public Drawable //: public DConnector
 {
  public:
   DLine(Tab * parent, std::string, float,float,float,float);
@@ -52,16 +53,19 @@ class DLine : public DConnector
   
   d_point_t p1;
   d_point_t p2;
+  float slope;
+  float intrcpt;
+  DTextBox * label;
 };
 
-class DShape : public Drawable
+/*class DShape : public Drawable
 {
  public:
   DTextBox label;
-};
+};*/
 
 #define DRAWABLE_RECTANGLE 2
-class DRectangle : public DShape
+class DRectangle : public Drawable //public DShape
 {
  public:
   DRectangle(Tab * parent, std::string, float,float,float,float);
@@ -74,6 +78,7 @@ class DRectangle : public DShape
   d_point_t tr;
   d_point_t bl;
   d_point_t br;
+  DTextBox * label;
 };
 
 #endif

@@ -9,17 +9,20 @@
 #include "imageManager.h"
 #include "tabbedNotebook.h"
 #include "common.h"
+#include "Callbacks.h"
+#define APPSTATE_DEFAULT  0
+#define APPSTATE_DRAW_RECTANGLE  1
+#define APPSTATE_DRAW_LINE 2
 
-class Application;
 class BGui
 {
  
  public:
-  BGui(Application * parent);
+  BGui();
   ~BGui();
   int setup();
   int set_image(cv::Mat * image);
-  
+  int appState;
   static 
   void on_window_closed(GtkWidget * window, gpointer data);
   
@@ -32,10 +35,12 @@ class BGui
   int addChild(GtkWidget * w, std::string s) {children.push_back(w); childIds.push_back(s); return 0;}
   GtkWidget * getChildById(std::string s);
   
-  
+  static void * do_draw(void * data);
+
   void setStatusMsg(std::string);
-  Application * parent;
   TabbedNotebook * notebook;
+  void toDefaultState();
+
  private:
   
   GtkWidget * window; //the window
@@ -49,6 +54,7 @@ class BGui
   std::vector<std::string> childIds;
     
   int closed;
+  
 };
 
 

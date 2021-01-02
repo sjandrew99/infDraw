@@ -10,6 +10,6 @@ float min(float,float);
 float max(float,float);
 
 #define LINE_WIDTH 2
-#define DRAW_PERIOD 10 //milliseconds
+//#define DRAW_PERIOD 10 //milliseconds
 
 #endif

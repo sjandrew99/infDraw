@@ -101,3 +101,15 @@ int Tab::addLine(float x1,float y1,float x2, float y2)
  return 0;
 }
 
+void Tab::drawAll()
+{
+ for (int i=0; i<drawables.size(); i++)
+ {
+  drawables[i]->draw();
+ }
+}
+
+void Tab::clear()
+{
+ imgMgr->clearFrame();
+}

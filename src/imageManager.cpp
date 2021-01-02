@@ -31,6 +31,14 @@ void ImageManager::clearFrame(cv::Mat & _frame)
  }
 }
 
+void ImageManager::cache()
+{
+ frame.copyTo(scratchFrame);
+}
+void ImageManager::pop()
+{
+ scratchFrame.copyTo(frame);
+}
 
 void ImageManager::resizeFrame(int width, int height)
 {

@@ -1,29 +1,31 @@
-#include "Application.h"
+#include "bgui.h"
 
 void Callbacks::imageMotionFunc(GtkWidget * w, GdkEventButton * e, gpointer data)
 {
  //fprintf(stderr,"MOUSE MOTION: %lf %lf\n",e->x,e->y);
  Tab * tab = (Tab *)data;
- Application * pgui = tab->parent->parent->parent;
+ BGui * pgui = tab->parent->parent;
  //pgui->scratchFrame = pgui->vidMgr.frame;
  //TODO - add something for APPSTATE_DEFAULT here
  if (pgui->appState == APPSTATE_DEFAULT)
  {
   //TODO - check for intersections
  }
- else if (pgui->appState == APPSTATE_DRAW_RECTANGLE && pgui->gui.clickedPoints.size() == 1)
+ else if (pgui->appState == APPSTATE_DRAW_RECTANGLE && pgui->clickedPoints.size() == 1)
  {
   //draw a rectangle between the first point and the current point
-  tab->imgMgr->scratchFrame.copyTo(tab->imgMgr->frame);
-  Artist::drawRectangle(tab->imgMgr->frame,pgui->gui.clickedPoints[0].x,pgui->gui.clickedPoints[0].y,e->x,e->y);
-  pgui->gui.set_image(&(tab->imgMgr->frame));
+  //tab->imgMgr->scratchFrame.copyTo(tab->imgMgr->frame);
+  tab->imgMgr->pop();
+  Artist::drawRectangle(tab->imgMgr->frame,pgui->clickedPoints[0].x,pgui->clickedPoints[0].y,e->x,e->y);
+  pgui->set_image(&(tab->imgMgr->frame));
  }
- else if (pgui->appState == APPSTATE_DRAW_LINE && pgui->gui.clickedPoints.size() == 1)
+ else if (pgui->appState == APPSTATE_DRAW_LINE && pgui->clickedPoints.size() == 1)
  {
   //fprintf(stderr,"IMAGEMOTION\n");
-  tab->imgMgr->scratchFrame.copyTo(tab->imgMgr->frame); // copy the scratchFrame to frame
-  Artist::drawLine(tab->imgMgr->frame,pgui->gui.clickedPoints[0].x,pgui->gui.clickedPoints[0].y,e->x,e->y);
-  pgui->gui.set_image(&(tab->imgMgr->frame)); // should only do this call when we're running line selector in a worker thread
+  //tab->imgMgr->scratchFrame.copyTo(tab->imgMgr->frame); // copy the scratchFrame to frame
+  tab->imgMgr->pop();
+  Artist::drawLine(tab->imgMgr->frame,pgui->clickedPoints[0].x,pgui->clickedPoints[0].y,e->x,e->y);
+  pgui->set_image(&(tab->imgMgr->frame)); // should only do this call when we're running line selector in a worker thread
  } 
 }
 
@@ -31,8 +33,8 @@ void Callbacks::imageMotionFunc(GtkWidget * w, GdkEventButton * e, gpointer data
 void Callbacks::imageClickFunc(GtkWidget * w, GdkEventButton * e, gpointer data)
 {
  Tab * tab = (Tab *)data;
- Application * app = tab->parent->parent->parent;
- app->gui.clickedPoints.push_back({e->x, e->y});
+ BGui * gui = tab->parent->parent;
+ gui->clickedPoints.push_back({e->x, e->y});
 }
 
 
@@ -48,19 +50,19 @@ void Callbacks::key_event(GtkWidget * w, GdkEventKey * e, gpointer data)
  {
   b->setStatusMsg("LINE");
   b->clickedPoints.clear(); 
-  b->parent->appState = APPSTATE_DRAW_LINE;
+  b->appState = APPSTATE_DRAW_LINE;
  }
  else if (strcmp(key,"s") == 0)
  {
   b->setStatusMsg("SELECT"); 
   b->clickedPoints.clear();
-  b->parent->appState = APPSTATE_DEFAULT;
+  b->appState = APPSTATE_DEFAULT;
  }
  else if (strcmp(key,"b") == 0)
  {
   b->setStatusMsg("BOX"); 
   b->clickedPoints.clear();
-  b->parent->appState = APPSTATE_DRAW_RECTANGLE;
+  b->appState = APPSTATE_DRAW_RECTANGLE;
  }
 
  
