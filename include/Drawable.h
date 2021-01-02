@@ -12,6 +12,7 @@ class Drawable
  public:
   virtual void draw() = 0;
   virtual void select() = 0;
+  void toggleSelection();
   virtual void highlight() = 0;
   std::string id;
   int type;
@@ -20,7 +21,8 @@ class Drawable
   int lineColor;
   int lineStyle;
   int selected;
-  Tab * parent; 
+  Tab * parent;
+  std::vector<d_point_t> clickablePoints; 
 };
 
 class DTextBox : public Drawable
@@ -73,7 +75,7 @@ class DRectangle : public Drawable //public DShape
   void select();
   void unselect();
   void highlight();
-
+  
   d_point_t tl; //top-left
   d_point_t tr;
   d_point_t bl;

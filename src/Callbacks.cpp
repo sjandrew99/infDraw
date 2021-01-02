@@ -34,7 +34,31 @@ void Callbacks::imageClickFunc(GtkWidget * w, GdkEventButton * e, gpointer data)
 {
  Tab * tab = (Tab *)data;
  BGui * gui = tab->parent->parent;
- gui->clickedPoints.push_back({e->x, e->y});
+ if (gui->appState==APPSTATE_DEFAULT)
+ {
+  int clicked = 1;
+  for (auto i = tab->drawables.begin(); i != tab->drawables.end(); ++i)
+  {
+   for (auto j= (*i)->clickablePoints.begin(); j != (*i)->clickablePoints.end(); ++j)
+   {
+    if ( (abs(e->x - j->x) < 5)
+         &&
+         (abs(e->y - j->y) < 5)
+         )
+    {
+      //(*i)->select();// = ! (*i)->selected;
+      (*i)->toggleSelection();
+      clicked=1;
+      break;
+    }
+   }
+   if (clicked) break; 
+  }
+ }
+ else
+ {
+  gui->clickedPoints.push_back({e->x, e->y});
+ }
 }
 
 
@@ -81,19 +105,13 @@ void Callbacks::select_drawable( GtkWidget * w, GdkEventButton * e, gpointer dat
    case DRAWABLE_LINE:
    {
     DLine * l = (DLine *)d; 
-    if (!l->selected)
-     l->select();
-    else
-     l->unselect();
+    l->toggleSelection();
     break;
    }
    case DRAWABLE_RECTANGLE:
    {
     DRectangle * r = (DRectangle *)(d); 
-    if (!r->selected)
-     r->select();
-    else
-     r->unselect();
+    r->toggleSelection();
     break;
    }
   }

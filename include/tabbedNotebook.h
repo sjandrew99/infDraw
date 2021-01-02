@@ -28,6 +28,7 @@ class Tab
   GtkWidget * objectList;
   //Artist * artist;
   std::vector<Drawable*> drawables;
+  //std::vector<> clickablePoints
   //std::vector<int> drawableTypes; 
   //int addDrawable(int which);
   int addRectangle(float x1,float y1,float x2, float y2);

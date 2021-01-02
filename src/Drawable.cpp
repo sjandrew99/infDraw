@@ -1,5 +1,11 @@
 #include "Drawable.h"
 //#include "common.h"
+
+void Drawable::toggleSelection()
+{
+ selected = !selected;
+}
+
 /////////// TEXTBOX //////////////
 
 DTextBox::DTextBox(Tab * parent, std::string text,float x, float y)
@@ -135,6 +141,21 @@ DRectangle::DRectangle(Tab * parent, std::string id, float x1, float y1, float x
  this->label = new DTextBox(parent, id, _x1, _y1+lineWidth*7);
  //TODO - add slope/intercept for line connecting br and tl, and the perp
  //fprintf(stderr,"ADD RECT: %f %f %f %f\n",_x1,_y1,_x2,_y2);
+ 
+ //add clickable points (TODO: non-rotated):
+ clickablePoints.clear();
+ //top and bottom:
+ for (float i=_x1-lineWidth; i<_x2+lineWidth; i+=2)
+ {
+  clickablePoints.push_back({i,_y1});
+  clickablePoints.push_back({i,_y2});
+ }
+ //sides:
+ for (float i=_y1-lineWidth; i<_y2+lineWidth; i+=2)
+ {
+  clickablePoints.push_back({_x1,i});
+  clickablePoints.push_back({_x2,i});
+ }
 }
 
 void DRectangle::draw()
@@ -155,6 +176,7 @@ void DRectangle::unselect()
 {
  selected=0;
 }
+
 
 void DRectangle::highlight()
 {
