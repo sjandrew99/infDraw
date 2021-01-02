@@ -42,6 +42,26 @@ void lineDrawThread(BGui * gui)
  }
 }
 
+void arrowLineDrawThread(BGui * gui) 
+{
+ //fprintf(stderr,"line selector thread\n");
+ static int drew = 0;
+ Tab * tab = gui->notebook->getActiveTab();
+ if (gui->clickedPoints.size() == 1 && !drew)
+ {
+   Artist::drawPoint(tab->imgMgr->frame,gui->clickedPoints[0].x,gui->clickedPoints[0].y);
+   tab->imgMgr->cache();
+   drew = 1;
+   gui->set_image(&(tab->imgMgr->frame)); 
+ }
+ if (gui->clickedPoints.size() == 2)
+ {
+  tab->addArrowLine(gui->clickedPoints[0].x,gui->clickedPoints[0].y,gui->clickedPoints[1].x,gui->clickedPoints[1].y);
+  gui->toDefaultState();
+  drew = 0;
+ }
+}
+
 void drawThread(BGui * gui)
 {
       //fprintf(stderr,"HERE\n");
@@ -66,6 +86,9 @@ void * BGui::do_draw(void * ptr)
       break;
      case APPSTATE_DRAW_RECTANGLE:
       rectangleDrawThread(gui);
+      break;
+     case APPSTATE_DRAW_ARROW_LINE:
+      arrowLineDrawThread(gui);
       break;
     }
     currently_drawing = 0;

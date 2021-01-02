@@ -40,6 +40,12 @@ int Artist::drawLine(cv::Mat & frame,float x1,float y1,float x2,float y2)
  return 0;
 }
 
+int Artist::drawArrowLine(cv::Mat & frame,float x1,float y1,float x2,float y2)
+{
+ cv::arrowedLine(frame, cv::Point(x1,y1), cv::Point(x2,y2), cv::Scalar(0,0,0), LINE_WIDTH);
+ return 0;
+}
+
 int Artist::drawText(cv::Mat & frame, float x, float y, std::string text)
 {                                                //fontFace, fontScale, color, thickness, lineType
  //lineTyoe enum: https://docs.opencv.org/master/d6/d6e/group__imgproc__draw.html#gaf076ef45de481ac96e0ab3dc2c29a777

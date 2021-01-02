@@ -81,7 +81,6 @@ int Tab::addRectangle(float x1,float y1,float x2, float y2)
  //gtk_list_box_insert(GTK_LIST_BOX(objectList),w,-1);
  gtk_list_box_insert(GTK_LIST_BOX(objectList),e,-1);
  drawables.push_back((Drawable *)rect);
- //imgMgr->resizeFrame(2080,1000);
  return 0;
 }
 
@@ -91,6 +90,22 @@ int Tab::addLine(float x1,float y1,float x2, float y2)
  Artist::drawLine(imgMgr->frame,x1,y1,x2,y2);
  char label[128]; sprintf(label,"Line%d",nLines); nLines++;
  DLine * line = new DLine(this,label,x1,y1,x2,y2);
+ 
+ GtkWidget * w = gtk_label_new(label); gtk_widget_show(w);
+ GtkWidget * e = gtk_event_box_new();
+ gtk_container_add(GTK_CONTAINER(e),w); gtk_widget_show(e);
+ g_signal_connect(e,"button-press-event",G_CALLBACK(Callbacks::select_drawable),line);//G_CALLBACK(on_window_closed),this);
+ gtk_list_box_insert(GTK_LIST_BOX(objectList),e,-1);
+ drawables.push_back((Drawable *)line);
+ return 0;
+}
+
+int Tab::addArrowLine(float x1,float y1,float x2, float y2)
+{
+ static int nLines = 0;
+ Artist::drawArrowLine(imgMgr->frame,x1,y1,x2,y2);
+ char label[128]; sprintf(label,"ArrowLine%d",nLines); nLines++;
+ DArrowLine * line = new DArrowLine(this,label,x1,y1,x2,y2);
  
  GtkWidget * w = gtk_label_new(label); gtk_widget_show(w);
  GtkWidget * e = gtk_event_box_new();

@@ -26,6 +26,14 @@ void Callbacks::imageMotionFunc(GtkWidget * w, GdkEventButton * e, gpointer data
   tab->imgMgr->pop();
   Artist::drawLine(tab->imgMgr->frame,pgui->clickedPoints[0].x,pgui->clickedPoints[0].y,e->x,e->y);
   pgui->set_image(&(tab->imgMgr->frame)); // should only do this call when we're running line selector in a worker thread
+ }
+ else if (pgui->appState == APPSTATE_DRAW_ARROW_LINE && pgui->clickedPoints.size() == 1)
+ {
+  //fprintf(stderr,"IMAGEMOTION\n");
+  //tab->imgMgr->scratchFrame.copyTo(tab->imgMgr->frame); // copy the scratchFrame to frame
+  tab->imgMgr->pop();
+  Artist::drawArrowLine(tab->imgMgr->frame,pgui->clickedPoints[0].x,pgui->clickedPoints[0].y,e->x,e->y);
+  pgui->set_image(&(tab->imgMgr->frame)); // should only do this call when we're running line selector in a worker thread
  } 
 }
 
@@ -87,6 +95,12 @@ void Callbacks::key_event(GtkWidget * w, GdkEventKey * e, gpointer data)
   b->setStatusMsg("BOX"); 
   b->clickedPoints.clear();
   b->appState = APPSTATE_DRAW_RECTANGLE;
+ }
+ else if (strcmp(key,"a") == 0)
+ {
+  b->setStatusMsg("ARROW"); 
+  b->clickedPoints.clear();
+  b->appState = APPSTATE_DRAW_ARROW_LINE;
  }
  else if (strcmp(key,"Delete") == 0 && b->appState == APPSTATE_DEFAULT)
  {

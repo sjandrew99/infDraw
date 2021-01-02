@@ -83,4 +83,21 @@ class DRectangle : public Drawable //public DShape
   DTextBox * label;
 };
 
+#define DRAWABLE_ARROW_LINE 1
+class DArrowLine : public Drawable //: public DConnector
+{
+ public:
+  DArrowLine(Tab * parent, std::string, float,float,float,float);
+  void draw();
+  void select();
+  void unselect();
+  void highlight();
+  
+  d_point_t p1;
+  d_point_t p2;
+  float slope;
+  float intrcpt;
+  DTextBox * label;
+};
+
 #endif
