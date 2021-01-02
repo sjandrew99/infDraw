@@ -1,6 +1,6 @@
 #include "bgui.h"
 #include "Callbacks.h"
-static int gtk_initialized = 0;
+//static int gtk_initialized = 0;
 int initMenuBar(BGui * parent, GtkWidget * parentGrid, int col, int row);
 BGui::BGui(Application * parent)
 {
@@ -136,4 +136,5 @@ int initMenuBar(BGui * parent, GtkWidget * parentGrid, int col, int row)
     gtk_menu_shell_append(GTK_MENU_SHELL(fileMenu),saveMi);
     gtk_menu_shell_append(GTK_MENU_SHELL(fileMenu),quitMi);*/
     gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),editMi);   
+ return 0;
 }

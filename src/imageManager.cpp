@@ -20,13 +20,21 @@ void ImageManager::clearScratchFrame()
 void ImageManager::clearFrame(cv::Mat & _frame)
 {
  cv::Mat_<cv::Vec3b> frame_ = _frame;
- for (unsigned int i=0; i<height; i++)
+ for (int i=0; i<height; i++)
  {
-  for (unsigned int j=0; j<width; j++)
+  for (int j=0; j<width; j++)
   {
    frame_(i,j)[0] = 255;  
    frame_(i,j)[1] = 255;  
    frame_(i,j)[2] = 255;  
   }
  }
+}
+
+
+void ImageManager::resizeFrame(int width, int height)
+{
+ //copyTo
+ this->width = width; this->height = height;
+ frame.create(height, width, CV_8UC3);
 }

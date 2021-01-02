@@ -1,6 +1,8 @@
 #ifndef BERN_CALLBACKS_H
 #define BERN_CALLBACKS_H
 
+#include "Drawable.h"
+
 namespace Callbacks
 {
  //static 
@@ -16,6 +18,9 @@ namespace Callbacks
 
  //gboolean key_event(GtkWidget * w, GdkEventKey *event);
  void key_event(GtkWidget * w, GdkEventKey * e, gpointer data);
+
+ void select_drawable( GtkWidget * w, GdkEventButton * e, gpointer data);
+
 };
 
 #endif

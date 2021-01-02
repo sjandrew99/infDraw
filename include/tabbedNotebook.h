@@ -7,8 +7,9 @@
 #include "controlPanel.h"
 #include "imageViewPort.h"
 #include "imageManager.h"
-#include "Drawable.h"
+//#include "Drawable.h"
 #include "Artist.h"
+class Drawable;
 class TabbedNotebook; //forward declare 
 class Tab
 {
@@ -28,7 +29,9 @@ class Tab
   //Artist * artist;
   std::vector<Drawable*> drawables;
   //std::vector<int> drawableTypes; 
-  int addDrawable(int which);
+  //int addDrawable(int which);
+  int addRectangle(float x1,float y1,float x2, float y2);
+  int addLine(float x1,float y1,float x2, float y2);
 };
 
 class BGui;

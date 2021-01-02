@@ -70,3 +70,29 @@ void Callbacks::key_event(GtkWidget * w, GdkEventKey * e, gpointer data)
  //return FALSE;
 }
 
+void Callbacks::select_drawable( GtkWidget * w, GdkEventButton * e, gpointer data)
+{
+  Drawable * d = (Drawable *)data;
+  switch (d->type)
+  {
+   case DRAWABLE_LINE:
+   {
+    DLine * l = (DLine *)d; 
+    if (!l->selected)
+     l->select();
+    else
+     l->unselect();
+    break;
+   }
+   case DRAWABLE_RECTANGLE:
+   {
+    DRectangle * r = (DRectangle *)(d); 
+    if (!r->selected)
+     r->select();
+    else
+     r->unselect();
+    break;
+   }
+  }
+  //fprintf(stderr,"HERE: %s\n",d->id.c_str());
+}

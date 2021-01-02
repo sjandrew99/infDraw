@@ -3,6 +3,9 @@
 
 #include <string>
 #include "common.h"
+#include "tabbedNotebook.h"
+#include "Artist.h"
+//class Tab; //forward declare
 
 class Drawable
 {
@@ -11,7 +14,13 @@ class Drawable
   virtual void select() = 0;
   virtual void highlight() = 0;
   std::string id;
-  int type; 
+  int type;
+  
+  int lineWidth;
+  int lineColor;
+  int lineStyle;
+  int selected;
+  Tab * parent; 
 };
 
 class DTextBox : public Drawable
@@ -35,9 +44,10 @@ class DConnector : public Drawable
 class DLine : public DConnector
 {
  public:
-  DLine();
+  DLine(Tab * parent, std::string, float,float,float,float);
   void draw();
   void select();
+  void unselect();
   void highlight();
   
   d_point_t p1;
@@ -54,9 +64,10 @@ class DShape : public Drawable
 class DRectangle : public DShape
 {
  public:
-  DRectangle();
+  DRectangle(Tab * parent, std::string, float,float,float,float);
   void draw();
   void select();
+  void unselect();
   void highlight();
 
   d_point_t tl; //top-left

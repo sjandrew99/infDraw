@@ -22,7 +22,7 @@ int TabbedNotebook::addTab()
     tab->grid = gtk_grid_new(); gtk_widget_show(tab->grid);
 
 
-    char name[128];
+    //char name[128];
     //ImageViewPort * imvp = new ImageViewPort("",tab->grid,1,1,imageClickedCallback,imageMouseMotionCallback,this->parent == NULL ? this : this->parent);
     tab->imageViewPort = new ImageViewPort("",tab->grid,1,1,
                                            G_CALLBACK(Callbacks::imageClickFunc),
@@ -66,28 +66,38 @@ Tab * TabbedNotebook::getActiveTab()
  return tabs[activeTab];
 }
 
-int Tab::addDrawable(int which)
+int Tab::addRectangle(float x1,float y1,float x2, float y2)
 {
- switch (which)
- {
-  case DRAWABLE_RECTANGLE:
-  {
-   DRectangle * rect = new DRectangle();
-   char label[128]; sprintf(label,"Rectangle%d",drawables.size());
-   GtkWidget * w = gtk_label_new(label); gtk_widget_show(w);
-   gtk_list_box_insert(GTK_LIST_BOX(objectList),w,-1);
-   drawables.push_back((Drawable *)rect);
-   break; 
-  }
-  case DRAWABLE_LINE:
-  {
-   DLine * line = new DLine();
-   char label[128]; sprintf(label,"Line%d",drawables.size());
-   GtkWidget * w = gtk_label_new(label); gtk_widget_show(w);
-   gtk_list_box_insert(GTK_LIST_BOX(objectList),w,-1);
-   drawables.push_back((Drawable *)line);
-   break;
-  }
- }
+ static int nRects = 0;
+ Artist::drawRectangle(imgMgr->frame,x1,y1,x2,y2);
+ char label[128]; sprintf(label,"Rectangle%d",nRects); nRects++;
+ DRectangle * rect = new DRectangle(this,label,x1,y1,x2,y2);
+ //fprintf(stderr,"HERE\n");
+ GtkWidget * w = gtk_label_new(label); gtk_widget_show(w);
+ GtkWidget * e = gtk_event_box_new();
+ gtk_container_add(GTK_CONTAINER(e),w); gtk_widget_show(e);
+ g_signal_connect(e,"button-press-event",G_CALLBACK(Callbacks::select_drawable),rect);
+
+ //gtk_list_box_insert(GTK_LIST_BOX(objectList),w,-1);
+ gtk_list_box_insert(GTK_LIST_BOX(objectList),e,-1);
+ drawables.push_back((Drawable *)rect);
+ //imgMgr->resizeFrame(2080,1000);
  return 0;
 }
+
+int Tab::addLine(float x1,float y1,float x2, float y2)
+{
+ static int nLines = 0;
+ Artist::drawLine(imgMgr->frame,x1,y1,x2,y2);
+ char label[128]; sprintf(label,"Line%d",nLines); nLines++;
+ DLine * line = new DLine(this,label,x1,y1,x2,y2);
+ 
+ GtkWidget * w = gtk_label_new(label); gtk_widget_show(w);
+ GtkWidget * e = gtk_event_box_new();
+ gtk_container_add(GTK_CONTAINER(e),w); gtk_widget_show(e);
+ g_signal_connect(e,"button-press-event",G_CALLBACK(Callbacks::select_drawable),line);//G_CALLBACK(on_window_closed),this);
+ gtk_list_box_insert(GTK_LIST_BOX(objectList),e,-1);
+ drawables.push_back((Drawable *)line);
+ return 0;
+}
+

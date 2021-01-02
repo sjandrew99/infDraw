@@ -12,6 +12,7 @@ public:
  void clearFrame();
  void clearScratchFrame();
  void clearFrame(cv::Mat &);
+ void resizeFrame(int,int);
  int width;
  int height;
 }; 

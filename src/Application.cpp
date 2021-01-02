@@ -9,6 +9,6 @@ Application::Application() :
  
  this->valid = 1;
  
- worker_thread_id = gdk_threads_add_timeout(10, (GSourceFunc)(Application::worker_thread_func), this); 
+ worker_thread_id = gdk_threads_add_timeout(DRAW_PERIOD, (GSourceFunc)(Application::worker_thread_func), this); 
 }
 

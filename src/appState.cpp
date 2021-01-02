@@ -16,10 +16,8 @@ void rectangleDrawThread(Application * app)
  if (app->gui.clickedPoints.size() == 2)
  {
   //save the rectangle to frame:
-  //tab->addRectangle(app->gui.clickedPoints[0].x,app->gui.clickedPoints[0].y,app->gui.clickedPoints[1].x,app->gui.clickedPoints[1].y);
-  Artist::drawRectangle(tab->imgMgr->frame,app->gui.clickedPoints[0].x,app->gui.clickedPoints[0].y,app->gui.clickedPoints[1].x,app->gui.clickedPoints[1].y);
+  tab->addRectangle(app->gui.clickedPoints[0].x,app->gui.clickedPoints[0].y,app->gui.clickedPoints[1].x,app->gui.clickedPoints[1].y);
   app->toDefaultState();
-  tab->addDrawable(DRAWABLE_RECTANGLE);
   drew = 0;
  }
 }
@@ -38,9 +36,8 @@ void lineDrawThread(Application * app)
  }
  if (app->gui.clickedPoints.size() == 2)
  {
-  Artist::drawLine(tab->imgMgr->frame,app->gui.clickedPoints[0].x,app->gui.clickedPoints[0].y,app->gui.clickedPoints[1].x,app->gui.clickedPoints[1].y);
+  tab->addLine(app->gui.clickedPoints[0].x,app->gui.clickedPoints[0].y,app->gui.clickedPoints[1].x,app->gui.clickedPoints[1].y);
   app->toDefaultState();
-  tab->addDrawable(DRAWABLE_LINE);
   drew = 0;
  }
 }
@@ -85,12 +82,13 @@ gboolean Application::worker_thread_func(Application * app)
  if (drawing_status == 0)
  {
   static pthread_t thread_info;
-  int iret;
+  //int iret;
   if (first_execution != TRUE)
   {
    pthread_join(thread_info,NULL);
   } 
-  iret = pthread_create(&thread_info, NULL, Application::do_draw, app);
+  //iret = 
+  pthread_create(&thread_info, NULL, Application::do_draw, app);
  }
  first_execution = FALSE;
  return TRUE;
