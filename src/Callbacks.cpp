@@ -32,7 +32,7 @@ void Callbacks::imageClickFunc(GtkWidget * w, GdkEventButton * e, gpointer data)
 {
  Tab * tab = (Tab *)data;
  Application * app = tab->parent->parent->parent;
- app->gui.clickedPoints.push_back({(int)e->x, (int)e->y});
+ app->gui.clickedPoints.push_back({e->x, e->y});
 }
 
 
@@ -62,6 +62,7 @@ void Callbacks::key_event(GtkWidget * w, GdkEventKey * e, gpointer data)
   b->clickedPoints.clear();
   b->parent->appState = APPSTATE_DRAW_RECTANGLE;
  }
+
  
  /*else if (strcmp(key,"c") == 0) 
  {

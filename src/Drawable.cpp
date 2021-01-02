@@ -95,5 +95,5 @@ void DRectangle::unselect()
 void DRectangle::highlight()
 {
  //fprintf(stderr,"HIGHLIGHT RECT: %f %f %f %f\n",tl.x-2,tl.y-2,br.x+2,);
- Artist::drawRectangle(parent->imgMgr->frame, tl.x-lineWidth,tl.y-lineWidth,br.x+lineWidth,br.y+lineWidth,0,0,255); 
+ Artist::drawRectangle(parent->imgMgr->frame, tl.x-lineWidth,tl.y-lineWidth,br.x+lineWidth,br.y+lineWidth,0,0,255,lineWidth); 
 }

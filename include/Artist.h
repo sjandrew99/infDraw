@@ -7,7 +7,7 @@ namespace Artist
 {
   int drawPoint(cv::Mat & frame, float,float);
   int drawRectangle(cv::Mat & frame,float,float,float,float); //draws black
-  int drawRectangle(cv::Mat & frame,float,float,float,float, unsigned int, unsigned int, unsigned int);
+  int drawRectangle(cv::Mat & frame,float,float,float,float, unsigned int, unsigned int, unsigned int,int width);
   int drawLine(cv::Mat & frame,float,float,float,float);
 };
 
