@@ -15,6 +15,7 @@ class Drawable
   void toggleSelection();
   virtual void highlight() = 0;
   virtual void toJson(FILE *) = 0;
+  virtual void propEditMenu() = 0;
   std::string id;
   int type;
   
@@ -36,6 +37,7 @@ class DTextBox : public Drawable
   std::string text; 
   float x; float y; //top left
   void toJson(FILE *);
+  void propEditMenu();
 };
 
 
@@ -61,6 +63,7 @@ class DLine : public Drawable //: public DConnector
   float intrcpt;
   DTextBox * label;
   void toJson(FILE *);
+  void propEditMenu();
 };
 
 /*class DShape : public Drawable
@@ -85,6 +88,7 @@ class DRectangle : public Drawable //public DShape
   d_point_t br;
   DTextBox * label;
   void toJson(FILE *);
+  void propEditMenu();
 };
 
 #define DRAWABLE_ARROW_LINE 1
@@ -103,6 +107,7 @@ class DArrowLine : public Drawable //: public DConnector
   float intrcpt;
   DTextBox * label;
   void toJson(FILE *);
+  void propEditMenu();
 };
 
 #endif

@@ -13,6 +13,8 @@ namespace Callbacks
  void toggle_playback(GtkWidget * widget, gpointer data);
  //static 
  void imageClickFunc(GtkWidget * w, GdkEventButton * e, gpointer data);
+ void imageRightClickFunc(GdkEventButton * e, gpointer data);
+
  //static 
  void imageMotionFunc(GtkWidget * w, GdkEventButton * e, gpointer data);
 

@@ -139,6 +139,7 @@ int initMenuBar(BGui * parent, GtkWidget * parentGrid, int col, int row)
     gtk_menu_shell_append(GTK_MENU_SHELL(fileMenu),newMi);
     gtk_menu_shell_append(GTK_MENU_SHELL(fileMenu),openMi);
     gtk_menu_shell_append(GTK_MENU_SHELL(fileMenu),saveMi);
+    gtk_menu_shell_append(GTK_MENU_SHELL(fileMenu),exportMi);
     gtk_menu_shell_append(GTK_MENU_SHELL(fileMenu),quitMi);
     gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),fileMi);   
     

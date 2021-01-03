@@ -40,6 +40,12 @@ void Callbacks::imageMotionFunc(GtkWidget * w, GdkEventButton * e, gpointer data
 
 void Callbacks::imageClickFunc(GtkWidget * w, GdkEventButton * e, gpointer data)
 {
+ if (e->button == GDK_BUTTON_SECONDARY)
+ {
+  Callbacks::imageRightClickFunc(e,data);
+  return;
+ }
+ 
  Tab * tab = (Tab *)data;
  BGui * gui = tab->parent->parent;
  if (gui->appState==APPSTATE_DEFAULT)
@@ -66,6 +72,35 @@ void Callbacks::imageClickFunc(GtkWidget * w, GdkEventButton * e, gpointer data)
  else
  {
   gui->clickedPoints.push_back({e->x, e->y});
+ }
+}
+
+void Callbacks::imageRightClickFunc(GdkEventButton * e, gpointer data)
+{
+ //fprintf(stderr,"HERE\n");
+ Tab * tab = (Tab *)data;
+ BGui * gui = tab->parent->parent;
+ if (gui->appState==APPSTATE_DEFAULT)
+ {
+  int clicked = 0;
+  for (auto i = tab->drawables.begin(); i != tab->drawables.end(); ++i)
+  {
+   for (auto j= (*i)->clickablePoints.begin(); j != (*i)->clickablePoints.end(); ++j)
+   {
+    if ( (abs(e->x - j->x) < 5)
+         &&
+         (abs(e->y - j->y) < 5)
+         )
+    {
+      //(*i)->select();// = ! (*i)->selected;
+      //(*i)->toggleSelection();
+      (*i)->propEditMenu();
+      clicked=1;
+      break;
+    }
+   }
+   if (clicked) break; 
+  }
  }
 }
 
@@ -106,6 +141,10 @@ void Callbacks::key_event(GtkWidget * w, GdkEventKey * e, gpointer data)
  {
   b->notebook->getActiveTab()->deleteSelectedDrawables();
  }
+ /*else if (strcmp(key,"t") == 0 && b->appState == APPSTATE_DEFAULT)
+ {
+  
+ }*/
 
  
  /*else if (strcmp(key,"c") == 0) 
