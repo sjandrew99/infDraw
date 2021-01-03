@@ -19,7 +19,7 @@ void ImageManager::clearScratchFrame()
 
 void ImageManager::clearFrame(cv::Mat & _frame)
 {
- cv::Mat_<cv::Vec3b> frame_ = _frame;
+ /*cv::Mat_<cv::Vec3b> frame_ = _frame;
  for (int i=0; i<height; i++)
  {
   for (int j=0; j<width; j++)
@@ -28,7 +28,15 @@ void ImageManager::clearFrame(cv::Mat & _frame)
    frame_(i,j)[1] = 255;  
    frame_(i,j)[2] = 255;  
   }
+ }*/
+ typedef cv::Point3_<uint8_t> Pixel;
+ _frame.forEach<Pixel>([](Pixel &p, const int * position) -> void 
+ {
+  p.x=255;
+  p.y=255;
+  p.z=255;
  }
+ );
 }
 
 void ImageManager::cache()
