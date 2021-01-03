@@ -185,6 +185,15 @@ void BGui::resizeCanvas(GtkWidget * window, gpointer data)
  //tab->imgMgr->resizeFrame(0,0);
 }
 
+void saveImg(GtkWidget * window, gpointer data)
+{
+ //TODO - make this less shitty
+ //TODO - figure out how to save the image after tab->drawAll, but before clearFrame()
+ //TODO - opencv interprets the image as BGR color order, but i use RGB internally - gotta convert 
+ BGui * g = (BGui *)data;
+ Tab * tab = g->notebook->getActiveTab();
+ cv::imwrite("stuff.png",tab->imgMgr->frame); 
+}
 int initMenuBar(BGui * parent, GtkWidget * parentGrid, int col, int row)
 {
     GtkWidget * menuBar = gtk_menu_bar_new(); //gtk_widget_show(menuBar);
@@ -195,6 +204,7 @@ int initMenuBar(BGui * parent, GtkWidget * parentGrid, int col, int row)
     GtkWidget * newMi = gtk_menu_item_new_with_label("New");
     GtkWidget * openMi = gtk_menu_item_new_with_label("Open");
     GtkWidget * saveMi = gtk_menu_item_new_with_label("Save");
+    g_signal_connect(saveMi, "activate",G_CALLBACK(saveImg),parent);
     GtkWidget * quitMi = gtk_menu_item_new_with_label("Quit");
     g_signal_connect(G_OBJECT(quitMi), "activate",
         G_CALLBACK(BGui::on_window_closed), parent);
