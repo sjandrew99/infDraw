@@ -25,7 +25,7 @@ class BGui
   int appState;
   static 
   void on_window_closed(GtkWidget * window, gpointer data);
-  
+  static void resizeCanvas(GtkWidget * window, gpointer data);  
   int isClosed()
   {
    return closed;

@@ -5,11 +5,14 @@ ImageViewPort::ImageViewPort(char * name, GtkWidget * parent_grid,int col, int r
            GCallback clickedCallback, GCallback mouseMotionCallback, void * callback_data)
 {
   image = NULL; //TODO - add an imageManager
+  //GtkWidget * 
+  scroll = gtk_scrolled_window_new(NULL,NULL); gtk_widget_show(scroll);
   
   frame = gtk_frame_new(NULL); gtk_widget_show(frame);
   gtk_widget_set_name(frame,name);
   gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_IN);
-  gtk_grid_attach(GTK_GRID(parent_grid), frame,col, row, 1, 1);
+  //gtk_grid_attach(GTK_GRID(parent_grid), frame,col, row, 1, 1);
+  gtk_grid_attach(GTK_GRID(parent_grid),scroll,col,row,1,1); gtk_container_add(GTK_CONTAINER(scroll),frame);
   
   drawing_area = gtk_drawing_area_new(); gtk_widget_show(drawing_area);
   //TODO - name

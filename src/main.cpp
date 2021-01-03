@@ -16,7 +16,8 @@ int main(int argc, char **argv)
   gtk_main_iteration_do(TRUE); //not sure if this should be true or false
   BGui::do_draw(&gui);
   /*count ++;
-  if (count < 100)
+  if (count > 100) break;*/
+  /*if (count < 100)
   {
    if (count % 2 == 0)
     app.gui.notebook->getActiveTab()->addLine(count*3,count*2,count+1,count*5);

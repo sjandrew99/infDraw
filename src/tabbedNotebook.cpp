@@ -46,12 +46,18 @@ int TabbedNotebook::addTab()
 int Tab::set_image(cv::Mat * image)
 {
  //fprintf(stderr,"HERE IN SET %d x %d\n",image->rows,image->cols);
- gtk_widget_set_size_request(imageViewPort->drawing_area,image->cols,image->rows);
+ //if (image != NULL)
+ {
+ gtk_widget_set_size_request(imageViewPort->drawing_area,image->cols,image->rows); //valgrid reports "invalid read of size 8" here, but idk why (i think it happens when i close the window)
+ gtk_widget_set_size_request(imageViewPort->scroll,//image->cols,image->rows);
+                             min(image->cols,1080), //TODO - use screen size instead of these numbers
+                             min(image->rows,920)); 
  //fprintf(stderr,"HERE IN SET2\n");
  imageViewPort->image = image;
  //fprintf(stderr,"HERE IN SET IMAGE - %d x %d\n",image->rows,image->cols);
  gtk_widget_queue_draw(imageViewPort->drawing_area); //or draw all?
  //gtk_widget_queue_draw(Window); //or draw all?
+ }
  return 0;
 }
 
