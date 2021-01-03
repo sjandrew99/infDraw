@@ -1,9 +1,7 @@
+- add method to edit text
 - add snap-connect
 - add method for user to add more tabs
-- add list of "drawables" on right-hand side of tab
-- add menu bar ("File","Edit", etc)
 - add method to change color, thickness, curvature, etc
-- add 'Drawable' class and descendants
 - add method to render text rotated
 - get rid of opencv drawing (maybe use cairo? - see https://developer.gnome.org/gtk3/stable/ch01s05.html)
-- add method to edit text
+
