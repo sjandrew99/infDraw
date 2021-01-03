@@ -31,6 +31,11 @@ void DTextBox::highlight()
 
 }
 
+void DTextBox::toJson(FILE * fp)
+{
+ fprintf(fp,"{\"type\": \"TEXTBOX\", \"id\": \"%s\", \"text\": \"%s\", \"x\": %.3f, \"y\": %.3f}",id.c_str(),text.c_str(),x,y);
+}
+
 /////////// LINE //////////////
 
 DLine::DLine(Tab * parent,std::string id, float x1, float y1, float x2, float y2)
@@ -132,6 +137,11 @@ void DLine::highlight()
   fprintf(stderr,"rotated rect:\n%.1f %.1f\n%.1f %.1f\n%.1f %.1f\n%.1f %.1f\n",x1p,y1p,x2p,y2p,x3p,y3p,x4p,y4p);
   printed = 1;
  }*/
+}
+
+void DLine::toJson(FILE * fp)
+{
+ fprintf(fp,"{\"type\": \"LINE\", \"id\": \"%s\", \"p1\": [%.3f, %.3f], \"p2\": [%.3f,%.3f]}",id.c_str(),p1.x,p1.y,p2.x,p2.y);
 }
 
 /////////// ARROW LINE //////////////
@@ -237,6 +247,10 @@ void DArrowLine::highlight()
  }*/
 }
 
+void DArrowLine::toJson(FILE * fp)
+{
+ fprintf(fp,"{\"type\": \"ARROWLINE\", \"id\": \"%s\", \"p1\": [%.3f, %.3f], \"p2\": [%.3f,%.3f]}",id.c_str(),p1.x,p1.y,p2.x,p2.y);
+}
 
 
 /////////// RECTANGLE //////////////
@@ -302,4 +316,9 @@ void DRectangle::highlight()
  parent->imgMgr->cache();
  //TODO - account for rotation
  Artist::drawRectangle(parent->imgMgr->frame, tl.x-(2*lineWidth),tl.y-(2*lineWidth),br.x+(2*lineWidth),br.y+(2*lineWidth),0,0,255,lineWidth); 
+}
+
+void DRectangle::toJson(FILE * fp)
+{
+ fprintf(fp,"{\"type\": \"RECTANGLE\", \"id\": \"%s\", \"p1\": [%.3f, %.3f], \"p2\": [%.3f,%.3f]}",id.c_str(),tl.x,tl.y,br.x,br.y);
 }

@@ -10,6 +10,7 @@
 #include "tabbedNotebook.h"
 #include "common.h"
 #include "Callbacks.h"
+#include "dialogs.h"
 #define APPSTATE_DEFAULT  0
 #define APPSTATE_DRAW_RECTANGLE  1
 #define APPSTATE_DRAW_LINE 2
