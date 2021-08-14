@@ -14,7 +14,7 @@ namespace Artist
                                     unsigned int, unsigned int, unsigned int,int width); //allows specifying all four points (8 coords) to draw a rotated rect
   
   int drawLine(cv::Mat & frame,float,float,float,float);
-  int drawArrowLine(cv::Mat & frame,float,float,float,float);
+  int drawArrowLine(cv::Mat & frame,float,float,float,float,float=.1);
   
   
   int drawText(cv::Mat & frame, float,float,std::string);

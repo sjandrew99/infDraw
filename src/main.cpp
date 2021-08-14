@@ -7,6 +7,8 @@
 #include <ctime>
 #endif
 
+void loadImg(GtkWidget * window, gpointer data); //defined in dialgos
+
 int main(int argc, char **argv)
 {
  gtk_init(&argc,&argv);
@@ -21,6 +23,10 @@ int main(int argc, char **argv)
  #ifdef USE_TIMER
   double avgTime = 0;
  #endif
+ if (argc > 1)
+ {
+  loadImg(NULL,&gui); 
+ }
  while(! gui.isClosed() )
  {
   gtk_main_iteration_do(TRUE); //not sure if this should be true or false

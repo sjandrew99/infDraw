@@ -34,9 +34,9 @@ class Tab
   //std::vector<> clickablePoints
   //std::vector<int> drawableTypes; 
   //int addDrawable(int which);
-  int addRectangle(float x1,float y1,float x2, float y2);
-  int addLine(float x1,float y1,float x2, float y2);
-  int addArrowLine(float x1,float y1,float x2, float y2);
+  int addRectangle(float x1,float y1,float x2, float y2, std::string labelText="aaaa",float textPosX=-1, float textPosY=-1);
+  int addLine(float x1,float y1,float x2, float y2,std::string labelText="aaaa",float textPosX=-1, float textPosY=-1);
+  int addArrowLine(float x1,float y1,float x2, float y2,float tipLength=.1, std::string labelText="aaaa",float textPosX=-1, float textPosY=-1);
   
   void drawAll();
   void clear();

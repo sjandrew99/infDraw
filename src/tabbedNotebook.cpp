@@ -73,16 +73,22 @@ Tab * TabbedNotebook::getActiveTab()
  return tabs[activeTab];
 }
 
-int Tab::addRectangle(float x1,float y1,float x2, float y2)
+int Tab::addRectangle(float x1,float y1,float x2, float y2,
+                      std::string labelText, float textPosX, float textPosY)
 {
  static int nRects = 0;
  Artist::drawRectangle(imgMgr->frame,x1,y1,x2,y2);
- char label[128]; sprintf(label,"Rectangle%d",nRects); nRects++;
- DRectangle * rect = new DRectangle(this,label,x1,y1,x2,y2);
+ //char * label; label = (char *)malloc(128);
+ char id[128];
+ sprintf(id,"Rectangle%d",nRects); 
+ 
+ nRects++;
+ 
+ DRectangle * rect = new DRectangle(this,id,x1,y1,x2,y2,labelText,textPosX, textPosY);
  //fprintf(stderr,"HERE\n");
  
  //add an entry into the object list:
- GtkWidget * w = gtk_label_new(label); gtk_widget_show(w);
+ GtkWidget * w = gtk_label_new(id); gtk_widget_show(w);
  GtkWidget * e = gtk_event_box_new();
  gtk_container_add(GTK_CONTAINER(e),w); gtk_widget_show(e);
  g_signal_connect(e,"button-press-event",G_CALLBACK(Callbacks::select_drawable),rect);
@@ -93,14 +99,16 @@ int Tab::addRectangle(float x1,float y1,float x2, float y2)
  return 0;
 }
 
-int Tab::addLine(float x1,float y1,float x2, float y2)
+int Tab::addLine(float x1,float y1,float x2, float y2,
+                 std::string labelText, float textPosX, float textPosY)
 {
  static int nLines = 0;
  Artist::drawLine(imgMgr->frame,x1,y1,x2,y2);
- char label[128]; sprintf(label,"Line%d",nLines); nLines++;
- DLine * line = new DLine(this,label,x1,y1,x2,y2);
+ char id[128]; sprintf(id,"Line%d",nLines); 
+ nLines++;
+ DLine * line = new DLine(this,id,x1,y1,x2,y2,labelText,textPosX,textPosY);
  
- GtkWidget * w = gtk_label_new(label); gtk_widget_show(w);
+ GtkWidget * w = gtk_label_new(id); gtk_widget_show(w);
  GtkWidget * e = gtk_event_box_new();
  gtk_container_add(GTK_CONTAINER(e),w); gtk_widget_show(e);
  g_signal_connect(e,"button-press-event",G_CALLBACK(Callbacks::select_drawable),line);//G_CALLBACK(on_window_closed),this);
@@ -109,14 +117,15 @@ int Tab::addLine(float x1,float y1,float x2, float y2)
  return 0;
 }
 
-int Tab::addArrowLine(float x1,float y1,float x2, float y2)
+int Tab::addArrowLine(float x1,float y1,float x2, float y2,
+                      float tipLength, std::string labelText, float textPosX, float textPosY)
 {
  static int nLines = 0;
  Artist::drawArrowLine(imgMgr->frame,x1,y1,x2,y2);
- char label[128]; sprintf(label,"ArrowLine%d",nLines); nLines++;
- DArrowLine * line = new DArrowLine(this,label,x1,y1,x2,y2);
+ char id[128]; sprintf(id,"ArrowLine%d",nLines); nLines++;
+ DArrowLine * line = new DArrowLine(this,id,x1,y1,x2,y2,tipLength,labelText,textPosX,textPosY);
  
- GtkWidget * w = gtk_label_new(label); gtk_widget_show(w);
+ GtkWidget * w = gtk_label_new(id); gtk_widget_show(w);
  GtkWidget * e = gtk_event_box_new();
  gtk_container_add(GTK_CONTAINER(e),w); gtk_widget_show(e);
  g_signal_connect(e,"button-press-event",G_CALLBACK(Callbacks::select_drawable),line);//G_CALLBACK(on_window_closed),this);

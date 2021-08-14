@@ -16,20 +16,6 @@ void rectPropCb(GtkWidget * window, GdkEventButton *e, gpointer data)
  gtk_widget_destroy(r->dialog);
 }
 
-typedef struct
-{
- GtkWidget * dialog;
- GtkWidget * textEntry;
- DArrowLine * arrow;
-}arrowPropData_t;
-arrowPropData_t arrowPropData;
-
-void arrowPropCb(GtkWidget * window, GdkEventButton *e, gpointer data)
-{
- arrowPropData_t * r = (arrowPropData_t *)data;
- r->arrow->label->text = gtk_entry_get_text(GTK_ENTRY(r->textEntry));
- gtk_widget_destroy(r->dialog);
-}
 
 
 static void close_dialog(GtkWidget * w, GdkEventButton* e, gpointer data)
@@ -51,6 +37,7 @@ DTextBox::DTextBox(Tab * parent, std::string text,float x, float y)
  this->text = text;
  this->x = x;
  this->y = y;
+ this->jsonStr = (char*)malloc(1024);
 }
 
 void DTextBox::draw()
@@ -68,6 +55,12 @@ void DTextBox::highlight()
 
 }
 
+char * DTextBox::toJson()
+{
+ sprintf(jsonStr,"{\"type\": \"TEXTBOX\", \"id\": \"%s\", \"text\": \"%s\", \"x\": %.3f, \"y\": %.3f}",id.c_str(),text.c_str(),x,y);
+ return jsonStr;
+}
+
 void DTextBox::toJson(FILE * fp)
 {
  fprintf(fp,"{\"type\": \"TEXTBOX\", \"id\": \"%s\", \"text\": \"%s\", \"x\": %.3f, \"y\": %.3f}",id.c_str(),text.c_str(),x,y);
@@ -80,7 +73,8 @@ void DTextBox::propEditMenu()
 
 /////////// LINE //////////////
 
-DLine::DLine(Tab * parent,std::string id, float x1, float y1, float x2, float y2)
+DLine::DLine(Tab * parent,std::string id, float x1, float y1, float x2, float y2,
+             std::string labelText, float textPosX, float textPosY)
 {
  this->parent = parent;
  this->id = id;
@@ -93,12 +87,16 @@ DLine::DLine(Tab * parent,std::string id, float x1, float y1, float x2, float y2
  
  float _x1 = min(x1,x2);
  float _x2 = max(x1,x2);
- float _y1 = min(y1,y2);
- float _y2 = max(y2,y1); 
+ //float _y1 = min(y1,y2);
+ //float _y2 = max(y2,y1); 
  
  slope = (y2-y1) / (x2-x1); 
  intrcpt = y2 - (slope*x2);
- this->label = new DTextBox(parent, id, x1,y1);
+ if (labelText == "aaaa")
+     labelText = id;
+ if (textPosX >=0 && textPosY >= 0)
+ {    x1 = textPosX; y1 = textPosY;}
+ this->label = new DTextBox(parent, labelText, x1,y1);
  
  //add clickable points:
  for (float i=_x1; i<_x2; i++)
@@ -183,17 +181,58 @@ void DLine::highlight()
 
 void DLine::toJson(FILE * fp)
 {
- fprintf(fp,"{\"type\": \"LINE\", \"id\": \"%s\", \"p1\": [%.3f, %.3f], \"p2\": [%.3f,%.3f]}",id.c_str(),p1.x,p1.y,p2.x,p2.y);
+ fprintf(fp,"{\"type\": \"LINE\", \"id\": \"%s\", \"p1\": [%.3f, %.3f], \"p2\": [%.3f,%.3f],\"label\":%s}",
+             id.c_str(),p1.x,p1.y,p2.x,p2.y,label->toJson());
+}
+typedef struct
+{
+ GtkWidget * dialog;
+ GtkWidget * textEntry;
+ DLine * line;
+}linePropData_t;
+linePropData_t linePropData;
+
+void linePropCb(GtkWidget * window, GdkEventButton *e, gpointer data)
+{
+ linePropData_t * r = (linePropData_t *)data;
+ r->line->label->text = gtk_entry_get_text(GTK_ENTRY(r->textEntry));
+ gtk_widget_destroy(r->dialog);
 }
 
 void DLine::propEditMenu()
 {
+/*GtkWidget * menu = gtk_menu_new();
+ gtk_menu_popup_at_pointer(GTK_MENU(menu),NULL);*/
+ GtkWidget * dialog = gtk_dialog_new();
+ GtkWidget * cBox = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
+ GtkWidget * grid = gtk_grid_new();
+ gtk_box_pack_start(GTK_BOX(cBox),grid,TRUE,TRUE,0);
+ //properties:
+ int row = 0;
+ 
+ GtkWidget * textLabel = gtk_label_new("Text:");
+ gtk_grid_attach(GTK_GRID(grid),textLabel,0,row,1,1);
+ GtkWidget * textEntry = gtk_entry_new();
+ gtk_entry_set_text(GTK_ENTRY(textEntry),label->text.c_str());
+ gtk_grid_attach(GTK_GRID(grid),textEntry,1,row,1,1);
+ row++;
+ 
+ GtkWidget * oButton = gtk_button_new_with_label("Apply");
+ gtk_grid_attach(GTK_GRID(grid),oButton,0,row,1,1);                                      
+ GtkWidget * cButton = gtk_button_new_with_label("Cancel");
+ g_signal_connect(cButton,"button-press-event",G_CALLBACK(close_dialog),dialog);
+ gtk_grid_attach(GTK_GRID(grid),cButton,1,row,1,1);  
+ linePropData = {dialog,textEntry,this};
+ g_signal_connect(oButton,"button-press-event",G_CALLBACK(linePropCb),&linePropData);
 
+ 
+ gtk_widget_show_all(dialog);
 }
 
 /////////// ARROW LINE //////////////
 
-DArrowLine::DArrowLine(Tab * parent,std::string id, float x1, float y1, float x2, float y2)
+DArrowLine::DArrowLine(Tab * parent,std::string id, float x1, float y1, float x2, float y2,
+                       float tipLength, std::string labelText, float textPosX, float textPosY)
 {
  this->parent = parent;
  this->id = id;
@@ -202,16 +241,19 @@ DArrowLine::DArrowLine(Tab * parent,std::string id, float x1, float y1, float x2
  p2 = {x2,y2};
  lineWidth = LINE_WIDTH; //TODO - pass this in
  selected = 0;
- 
- 
+ this->tipLength = tipLength;
  float _x1 = min(x1,x2);
  float _x2 = max(x1,x2);
- float _y1 = min(y1,y2);
- float _y2 = max(y2,y1); 
+ //float _y1 = min(y1,y2);
+ //float _y2 = max(y2,y1); 
  
  slope = (y2-y1) / (x2-x1); 
  intrcpt = y2 - (slope*x2);
- this->label = new DTextBox(parent, id, x1,y1);
+ if (labelText == "aaaa")
+     labelText = id;
+ if (textPosX >=0 && textPosY >= 0)
+ {    x1 = textPosX; y1 = textPosY;}
+ this->label = new DTextBox(parent, labelText, x1,y1);
  
  //add clickable points:
  for (float i=_x1; i<_x2; i++)
@@ -222,7 +264,7 @@ DArrowLine::DArrowLine(Tab * parent,std::string id, float x1, float y1, float x2
 
 void DArrowLine::draw() 
 {
- Artist::drawArrowLine(parent->imgMgr->frame,p1.x,p1.y,p2.x,p2.y);
+ Artist::drawArrowLine(parent->imgMgr->frame,p1.x,p1.y,p2.x,p2.y,tipLength);
  if (selected)
   highlight();
  label->draw();
@@ -296,8 +338,27 @@ void DArrowLine::highlight()
 
 void DArrowLine::toJson(FILE * fp)
 {
- fprintf(fp,"{\"type\": \"ARROWLINE\", \"id\": \"%s\", \"p1\": [%.3f, %.3f], \"p2\": [%.3f,%.3f]}",id.c_str(),p1.x,p1.y,p2.x,p2.y);
+ fprintf(fp,"{\"type\": \"ARROWLINE\", \"id\": \"%s\", \"p1\": [%.3f, %.3f], \"p2\": [%.3f,%.3f], \"tipLength\": %.3f, \"label\": %s}",
+             id.c_str(),p1.x,p1.y,p2.x,p2.y,tipLength,label->toJson());
 }
+
+typedef struct
+{
+ GtkWidget * dialog;
+ GtkWidget * textEntry;
+ GtkWidget * textEntry2;
+ DArrowLine * arrow;
+}arrowPropData_t;
+arrowPropData_t arrowPropData;
+
+void arrowPropCb(GtkWidget * window, GdkEventButton *e, gpointer data)
+{
+ arrowPropData_t * r = (arrowPropData_t *)data;
+ r->arrow->label->text = gtk_entry_get_text(GTK_ENTRY(r->textEntry));
+ r->arrow->tipLength = atof(gtk_entry_get_text(GTK_ENTRY(r->textEntry2)))/100;
+ gtk_widget_destroy(r->dialog);
+}
+
 
 void DArrowLine::propEditMenu()
 {
@@ -317,12 +378,23 @@ void DArrowLine::propEditMenu()
  gtk_grid_attach(GTK_GRID(grid),textEntry,1,row,1,1);
  row++;
  
+ GtkWidget * textLabel2 = gtk_label_new("Tip size (\%):");
+ gtk_grid_attach(GTK_GRID(grid),textLabel2,0,row,1,1);
+ GtkWidget * textEntry2 = gtk_entry_new();
+ char buf[10];
+ sprintf(buf,"%.2f",tipLength*100);
+ gtk_entry_set_text(GTK_ENTRY(textEntry2),buf);
+ //gtk_entry_set_text(GTK_ENTRY(textEntry2),std::to_string(tipLength*100).c_str());
+ 
+ gtk_grid_attach(GTK_GRID(grid),textEntry2,1,row,1,1);
+ row++;
+ 
  GtkWidget * oButton = gtk_button_new_with_label("Apply");
  gtk_grid_attach(GTK_GRID(grid),oButton,0,row,1,1);                                      
  GtkWidget * cButton = gtk_button_new_with_label("Cancel");
  g_signal_connect(cButton,"button-press-event",G_CALLBACK(close_dialog),dialog);
  gtk_grid_attach(GTK_GRID(grid),cButton,1,row,1,1);  
- arrowPropData = {dialog,textEntry,this};
+ arrowPropData = {dialog,textEntry,textEntry2,this};
  g_signal_connect(oButton,"button-press-event",G_CALLBACK(arrowPropCb),&arrowPropData);
 
  
@@ -332,7 +404,8 @@ void DArrowLine::propEditMenu()
 
 /////////// RECTANGLE //////////////
 
-DRectangle::DRectangle(Tab * parent, std::string id, float x1, float y1, float x2, float y2)
+DRectangle::DRectangle(Tab * parent, std::string id, float x1, float y1, float x2, float y2, 
+                       std::string labelText, float textPosX, float textPosY)
 {
  this->parent = parent;
  this->id = id;
@@ -347,7 +420,12 @@ DRectangle::DRectangle(Tab * parent, std::string id, float x1, float y1, float x
  br = {_x2,_y2};
  lineWidth = LINE_WIDTH; //TODO - pass this in
  selected = 0;
- this->label = new DTextBox(parent, id, _x1, _y1+lineWidth*7);
+ 
+ if (labelText == "aaaa")
+     labelText = id;
+ if (textPosX >=0 && textPosY >= 0)
+ {    _x1 = textPosX; _y1 = textPosY;}
+ this->label = new DTextBox(parent, labelText, _x1, _y1+lineWidth*7);
  //TODO - add slope/intercept for line connecting br and tl, and the perp
  //fprintf(stderr,"ADD RECT: %f %f %f %f\n",_x1,_y1,_x2,_y2);
  
@@ -397,7 +475,8 @@ void DRectangle::highlight()
 
 void DRectangle::toJson(FILE * fp)
 {
- fprintf(fp,"{\"type\": \"RECTANGLE\", \"id\": \"%s\", \"p1\": [%.3f, %.3f], \"p2\": [%.3f,%.3f]}",id.c_str(),tl.x,tl.y,br.x,br.y);
+ fprintf(fp,"{\"type\": \"RECTANGLE\", \"id\": \"%s\", \"p1\": [%.3f, %.3f], \"p2\": [%.3f,%.3f], \"label\":%s}",
+ id.c_str(),tl.x,tl.y,br.x,br.y,label->toJson());
 }
 
 

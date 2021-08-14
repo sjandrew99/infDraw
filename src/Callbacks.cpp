@@ -164,7 +164,6 @@ void Callbacks::select_drawable( GtkWidget * w, GdkEventButton * e, gpointer dat
 {
   if (e->button == GDK_BUTTON_SECONDARY)
   {
-   fprintf(stderr,"HERE\n");
    Callbacks::objectListRightClickFunc(e,data);
    return;
   }

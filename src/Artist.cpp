@@ -40,9 +40,9 @@ int Artist::drawLine(cv::Mat & frame,float x1,float y1,float x2,float y2)
  return 0;
 }
 
-int Artist::drawArrowLine(cv::Mat & frame,float x1,float y1,float x2,float y2)
+int Artist::drawArrowLine(cv::Mat & frame,float x1,float y1,float x2,float y2,float tipLength)
 {
- cv::arrowedLine(frame, cv::Point(x1,y1), cv::Point(x2,y2), cv::Scalar(0,0,0), LINE_WIDTH);
+ cv::arrowedLine(frame, cv::Point(x1,y1), cv::Point(x2,y2), cv::Scalar(0,0,0), LINE_WIDTH,cv::LINE_AA,0,tipLength);
  return 0;
 }
 

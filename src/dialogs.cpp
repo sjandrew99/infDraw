@@ -136,7 +136,7 @@ void loadImg(GtkWidget * window, gpointer data)
  fread(buf,1,fsize,fp);
  buf[fsize] = 0;
  auto obj = json::parse(buf);
- free(buf);
+ //free(buf);
  fclose(fp);
  auto drawables = obj["drawables"];
  /*for (int i=0; i<drawables.size(); i++)
@@ -161,17 +161,26 @@ void loadImg(GtkWidget * window, gpointer data)
    auto dtype = drawable["type"].get<std::string>();
    auto p1 = drawable["p1"].get<std::vector<float>>();
    auto p2 = drawable["p2"].get<std::vector<float>>();
+   auto label = drawable["label"];
+   auto tx = label["x"].get<float>();
+   auto ty = label["y"].get<float>();
+   
    if (dtype == "LINE")
    {
-    tab->addLine(p1[0],p1[1],p2[0],p2[1]);       
+    //fprintf(stderr,"adding line at %.3f, %.3f\n",tx,ty)
+    tab->addLine(p1[0],p1[1],p2[0],p2[1],
+    label["text"], tx, ty
+    );       
    }
    else if (dtype=="RECTANGLE")
    {
-    tab->addRectangle(p1[0],p1[1],p2[0],p2[1]);       
+    tab->addRectangle(p1[0],p1[1],p2[0],p2[1],
+    label["text"],tx,ty);       
    }
    else if (dtype=="ARROWLINE")
    {
-   tab->addArrowLine(p1[0],p1[1],p2[0],p2[1]);       
+    tab->addArrowLine(p1[0],p1[1],p2[0],p2[1],
+    drawable["tipLength"],label["text"],tx,ty);       
    }
    else
    {
@@ -179,7 +188,7 @@ void loadImg(GtkWidget * window, gpointer data)
    }
   } 
  }
-
+ free(buf);
 }
 
 int initMenuBar(BGui * parent, GtkWidget * parentGrid, int col, int row)
