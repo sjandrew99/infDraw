@@ -26,10 +26,10 @@ int BGui::setup()
     winGrid = gtk_grid_new(); gtk_container_add(GTK_CONTAINER(window),winGrid);
     
     //MENU (http://zetcode.com/gui/gtk2/menusandtoolbars/):
-    initMenuBar(this,winGrid,0,0);
+    initMenuBar(this,winGrid,0,0); //top menu
        
     notebook = new TabbedNotebook(this,winGrid,0,1);
-    notebook->addTab();
+    notebook->addTab(); //adds most of the gui objects
     
     g_signal_connect(window,"destroy",G_CALLBACK(on_window_closed),this);
     this->statusMsg = gtk_label_new("SELECT"); //gtk_widget_show(this->statusMsg);

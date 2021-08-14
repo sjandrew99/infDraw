@@ -104,6 +104,11 @@ void Callbacks::imageRightClickFunc(GdkEventButton * e, gpointer data)
  }
 }
 
+void Callbacks::objectListRightClickFunc(GdkEventButton * e, gpointer data)
+{
+    Drawable * d = (Drawable *)data;
+    d->propEditMenu();
+}
 
 //gboolean Callbacks::key_event(GtkWidget * widget, GdkEventKey *event)
 void Callbacks::key_event(GtkWidget * w, GdkEventKey * e, gpointer data)
@@ -154,8 +159,16 @@ void Callbacks::key_event(GtkWidget * w, GdkEventKey * e, gpointer data)
  //return FALSE;
 }
 
+//called when user clicks a name in the objectList
 void Callbacks::select_drawable( GtkWidget * w, GdkEventButton * e, gpointer data)
 {
+  if (e->button == GDK_BUTTON_SECONDARY)
+  {
+   fprintf(stderr,"HERE\n");
+   Callbacks::objectListRightClickFunc(e,data);
+   return;
+  }
+  
   Drawable * d = (Drawable *)data;
   switch (d->type)
   {

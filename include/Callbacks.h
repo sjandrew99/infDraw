@@ -14,6 +14,7 @@ namespace Callbacks
  //static 
  void imageClickFunc(GtkWidget * w, GdkEventButton * e, gpointer data);
  void imageRightClickFunc(GdkEventButton * e, gpointer data);
+ void objectListRightClickFunc(GdkEventButton * e, gpointer data);
 
  //static 
  void imageMotionFunc(GtkWidget * w, GdkEventButton * e, gpointer data);

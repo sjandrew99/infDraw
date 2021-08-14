@@ -1,6 +1,37 @@
 #include "Drawable.h"
 //#include "common.h"
 
+typedef struct
+{
+ GtkWidget * dialog;
+ GtkWidget * textEntry;
+ DRectangle * rect;
+}rectPropData_t;
+rectPropData_t rectPropData;
+
+void rectPropCb(GtkWidget * window, GdkEventButton *e, gpointer data)
+{
+ rectPropData_t * r = (rectPropData_t *)data;
+ r->rect->label->text = gtk_entry_get_text(GTK_ENTRY(r->textEntry));
+ gtk_widget_destroy(r->dialog);
+}
+
+typedef struct
+{
+ GtkWidget * dialog;
+ GtkWidget * textEntry;
+ DArrowLine * arrow;
+}arrowPropData_t;
+arrowPropData_t arrowPropData;
+
+void arrowPropCb(GtkWidget * window, GdkEventButton *e, gpointer data)
+{
+ arrowPropData_t * r = (arrowPropData_t *)data;
+ r->arrow->label->text = gtk_entry_get_text(GTK_ENTRY(r->textEntry));
+ gtk_widget_destroy(r->dialog);
+}
+
+
 static void close_dialog(GtkWidget * w, GdkEventButton* e, gpointer data)
 {
  gtk_widget_destroy(GTK_WIDGET(data));
@@ -270,7 +301,32 @@ void DArrowLine::toJson(FILE * fp)
 
 void DArrowLine::propEditMenu()
 {
+/*GtkWidget * menu = gtk_menu_new();
+ gtk_menu_popup_at_pointer(GTK_MENU(menu),NULL);*/
+ GtkWidget * dialog = gtk_dialog_new();
+ GtkWidget * cBox = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
+ GtkWidget * grid = gtk_grid_new();
+ gtk_box_pack_start(GTK_BOX(cBox),grid,TRUE,TRUE,0);
+ //properties:
+ int row = 0;
+ 
+ GtkWidget * textLabel = gtk_label_new("Text:");
+ gtk_grid_attach(GTK_GRID(grid),textLabel,0,row,1,1);
+ GtkWidget * textEntry = gtk_entry_new();
+ gtk_entry_set_text(GTK_ENTRY(textEntry),label->text.c_str());
+ gtk_grid_attach(GTK_GRID(grid),textEntry,1,row,1,1);
+ row++;
+ 
+ GtkWidget * oButton = gtk_button_new_with_label("Apply");
+ gtk_grid_attach(GTK_GRID(grid),oButton,0,row,1,1);                                      
+ GtkWidget * cButton = gtk_button_new_with_label("Cancel");
+ g_signal_connect(cButton,"button-press-event",G_CALLBACK(close_dialog),dialog);
+ gtk_grid_attach(GTK_GRID(grid),cButton,1,row,1,1);  
+ arrowPropData = {dialog,textEntry,this};
+ g_signal_connect(oButton,"button-press-event",G_CALLBACK(arrowPropCb),&arrowPropData);
 
+ 
+ gtk_widget_show_all(dialog);
 }
 
 
@@ -344,20 +400,7 @@ void DRectangle::toJson(FILE * fp)
  fprintf(fp,"{\"type\": \"RECTANGLE\", \"id\": \"%s\", \"p1\": [%.3f, %.3f], \"p2\": [%.3f,%.3f]}",id.c_str(),tl.x,tl.y,br.x,br.y);
 }
 
-typedef struct
-{
- GtkWidget * dialog;
- GtkWidget * textEntry;
- DRectangle * rect;
-}rectPropData_t;
-rectPropData_t rectPropData;
 
-void rectPropCb(GtkWidget * window, GdkEventButton *e, gpointer data)
-{
- rectPropData_t * r = (rectPropData_t *)data;
- r->rect->label->text = gtk_entry_get_text(GTK_ENTRY(r->textEntry));
- gtk_widget_destroy(r->dialog);
-}
 
 void DRectangle::propEditMenu()
 {

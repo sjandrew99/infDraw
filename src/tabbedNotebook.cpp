@@ -12,6 +12,7 @@ TabbedNotebook::TabbedNotebook(BGui * _parent, GtkWidget * parentGrid, int col, 
  nTabs = 0;
  activeTab = -1;
 }
+
 int TabbedNotebook::addTab()
 {
 
@@ -38,7 +39,7 @@ int TabbedNotebook::addTab()
     
     gtk_notebook_append_page(GTK_NOTEBOOK(notebook),tab->grid,gtk_label_new("Chart1"));
     
-    tab->objectList = tab->controlPanelRight->addControl(CONTROL_PANEL_LIST_BOX,"objects",0,0);
+    tab->objectList = tab->controlPanelRight->addControl(CONTROL_PANEL_LIST_BOX,"objects",0,0); //right object list
     
     return (nTabs-1);   
 }
@@ -79,6 +80,8 @@ int Tab::addRectangle(float x1,float y1,float x2, float y2)
  char label[128]; sprintf(label,"Rectangle%d",nRects); nRects++;
  DRectangle * rect = new DRectangle(this,label,x1,y1,x2,y2);
  //fprintf(stderr,"HERE\n");
+ 
+ //add an entry into the object list:
  GtkWidget * w = gtk_label_new(label); gtk_widget_show(w);
  GtkWidget * e = gtk_event_box_new();
  gtk_container_add(GTK_CONTAINER(e),w); gtk_widget_show(e);

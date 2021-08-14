@@ -18,7 +18,7 @@ INCDIRS = $(OPENCV_INCDIRS) .
 
 Iincs := $(foreach inc,$(INCDIRS),-I$(inc))
 
-cflags= -I$(incdir) -Wall -fmax-errors=1 -g -DDEBUG $(Ideps) $(Iincs) $(cflags_gtk) -I/usr/include/eigen3 -O3
+cflags= -I$(incdir) -Wall -fmax-errors=1 -g -DDEBUG $(Ideps) $(Iincs) $(cflags_gtk) -I/usr/include/eigen3 -O3 -std=c++11
 pycflags= -I$(incdir) $(Iincs) $(cflags_gtk) -I/usr/include/eigen3
 
 #linker flags:

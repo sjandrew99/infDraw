@@ -1,7 +1,7 @@
 #include "dialogs.h"
 
 
-void close_dialog(GtkWidget * w, GdkEventButton* e, gpointer data)
+static void close_dialog(GtkWidget * w, GdkEventButton* e, gpointer data)
 {
  gtk_widget_destroy(GTK_WIDGET(data));
 }
@@ -119,6 +119,69 @@ void saveImg(GtkWidget * window, gpointer data)
  fclose(fp);
 }
 
+#include <nlohmann/json.hpp>
+using json = nlohmann::json;
+void loadImg(GtkWidget * window, gpointer data)
+{
+ BGui * g = (BGui *)data;
+ Tab * tab = g->notebook->getActiveTab();
+ //cv::imwrite("stuff.png",tab->imgMgr->frame); 
+ char * fname = "stuff.json"; //TODO - allow user to enter a filename
+ 
+ FILE * fp = fopen(fname,"r");
+ fseek(fp,0,SEEK_END);
+ long int fsize = ftell(fp) + 1;  
+ fseek(fp,0,SEEK_SET);
+ char * buf = (char *)malloc(sizeof(char*)*fsize);
+ fread(buf,1,fsize,fp);
+ buf[fsize] = 0;
+ auto obj = json::parse(buf);
+ free(buf);
+ fclose(fp);
+ auto drawables = obj["drawables"];
+ /*for (int i=0; i<drawables.size(); i++)
+ {
+      fprintf(stderr,"%s\n",drawables[i]["type"]); 
+ }*/
+ 
+ /*for (json::iterator it = obj.begin(); it != obj.end(); ++it)
+ {
+     std::cout << *it << '\n';
+     //std::cout << (*it)["type"] << '\n';
+ }*/
+ 
+ for (auto& element : obj)
+ {
+  //std::cout << element <<'\n';
+  //std::cout << element["type"] <<'\n';
+  for (auto& drawable : element)
+  {
+   
+   //std::cout << drawable["type"] <<'\n';
+   auto dtype = drawable["type"].get<std::string>();
+   auto p1 = drawable["p1"].get<std::vector<float>>();
+   auto p2 = drawable["p2"].get<std::vector<float>>();
+   if (dtype == "LINE")
+   {
+    tab->addLine(p1[0],p1[1],p2[0],p2[1]);       
+   }
+   else if (dtype=="RECTANGLE")
+   {
+    tab->addRectangle(p1[0],p1[1],p2[0],p2[1]);       
+   }
+   else if (dtype=="ARROWLINE")
+   {
+   tab->addArrowLine(p1[0],p1[1],p2[0],p2[1]);       
+   }
+   else
+   {
+    fprintf(stderr,"Warning - unknown drawable type %s in %s\n",dtype.c_str(),fname);
+   }
+  } 
+ }
+
+}
+
 int initMenuBar(BGui * parent, GtkWidget * parentGrid, int col, int row)
 {
     GtkWidget * menuBar = gtk_menu_bar_new(); //gtk_widget_show(menuBar);
@@ -128,6 +191,7 @@ int initMenuBar(BGui * parent, GtkWidget * parentGrid, int col, int row)
     GtkWidget * fileMi = gtk_menu_item_new_with_label("File");
     GtkWidget * newMi = gtk_menu_item_new_with_label("New");
     GtkWidget * openMi = gtk_menu_item_new_with_label("Open");
+    g_signal_connect(openMi,"activate",G_CALLBACK(loadImg),parent);
     GtkWidget * saveMi = gtk_menu_item_new_with_label("Save");
     g_signal_connect(saveMi, "activate",G_CALLBACK(saveImg),parent);
     GtkWidget * exportMi = gtk_menu_item_new_with_label("Export");
