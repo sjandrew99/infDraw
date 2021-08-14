@@ -169,8 +169,7 @@ void loadImg(GtkWidget * window, gpointer data)
    {
     //fprintf(stderr,"adding line at %.3f, %.3f\n",tx,ty)
     tab->addLine(p1[0],p1[1],p2[0],p2[1],
-    label["text"], tx, ty
-    );       
+    label["text"], tx, ty);       
    }
    else if (dtype=="RECTANGLE")
    {
