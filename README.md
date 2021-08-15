@@ -11,3 +11,6 @@
    's': select mode
    'l': draw line 
    'b': draw box
+
+
+using json parser: https://github.com/nlohmann/json
