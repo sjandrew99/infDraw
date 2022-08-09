@@ -25,7 +25,10 @@ int main(int argc, char **argv)
  #endif
  if (argc > 1)
  {
+  
   loadImg(NULL,&gui); 
+  //std::tuple<BGui*, char*> loadImgParams (&gui, argv[1]);
+  //loadImg(NULL, &loadImgParams);
  }
  while(! gui.isClosed() )
  {

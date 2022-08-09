@@ -157,6 +157,16 @@ void Callbacks::key_event(GtkWidget * w, GdkEventKey * e, gpointer data)
   b->notebook->getActiveTab()->imgMgr->clearFrame();
  }*/
  //return FALSE;
+ else
+ {
+    //print out all hotkey options
+    printf("available hotkeys:\n");
+    printf("    l : draw line\n");
+    printf("    s : select objects\n");
+    printf("    b : draw box\n");
+    printf("    a : draw arrow\n");
+    printf("  del : delete selected objects\n");
+ }
 }
 
 //called when user clicks a name in the objectList
