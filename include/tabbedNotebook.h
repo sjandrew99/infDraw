@@ -3,7 +3,7 @@
 #include <opencv2/opencv.hpp>
 #include <gtk/gtk.h>
 #include <vector>
-
+#include <list>
 #include "controlPanel.h"
 #include "imageViewPort.h"
 #include "imageManager.h"

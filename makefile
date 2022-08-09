@@ -4,7 +4,8 @@ srcdir=src
 objdir=obj
 incdir=include
 
-OPENCV_LIBS = -lopencv_calib3d -lopencv_core -lopencv_dnn -lopencv_features2d -lopencv_flann -lopencv_gapi -lopencv_highgui -lopencv_imgcodecs -lopencv_imgproc -lopencv_ml -lopencv_objdetect -lopencv_photo -lopencv_stitching -lopencv_videoio -lopencv_video
+#OPENCV_LIBS = -lopencv_calib3d -lopencv_core -lopencv_dnn -lopencv_features2d -lopencv_flann -lopencv_gapi -lopencv_highgui -lopencv_imgcodecs -lopencv_imgproc -lopencv_ml -lopencv_objdetect -lopencv_photo -lopencv_stitching -lopencv_videoio -lopencv_video
+OPENCV_LIBS = -lopencv_calib3d -lopencv_core -lopencv_dnn -lopencv_features2d -lopencv_flann -lopencv_highgui -lopencv_imgcodecs -lopencv_imgproc -lopencv_ml -lopencv_objdetect -lopencv_videoio -lopencv_video
 OPENCV_INCDIRS = /usr/local/include/opencv4
 
 cflags_gtk := $(shell pkg-config --cflags gtk+-3.0) 
@@ -27,6 +28,7 @@ LFLAGS = $(LIBS) $(LIBDIRS) -g $(lflags_gtk) #-L/home/steve/build/opencv/build/l
 #get list of src and corresponding object files
 ALL_OBJS := $(patsubst $(srcdir)/%.cpp, $(objdir)/%.o, $(wildcard $(srcdir)/*.cpp))
 
+$(shell mkdir -p $(objdir))
 
 #targets:
 .PHONY: all clean
@@ -47,3 +49,4 @@ clean :
 	@echo "make -f ./makefile clean"
 	rm -f infDraw $(ALL_OBJS)
 	$(foreach dlib, $(deplibs), cd $(dir $(dlib)) && make clean) 
+        # deplibs is a list of subdirectories containing things you want to build separately and link in as static libs. it's empty in this makefile
